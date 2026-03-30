@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Banner TV - Avisos e Comunicados</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy: #0a1628;
+    --navy-mid: #112240;
+    --navy-light: #1a3a5c;
+    --gold: #c9a84c;
+    --gold-light: #e8c96e;
+    --silver: #a8b8cc;
+    --white: #f4f7fb;
+    --slide-duration: 8s;
+  }
+
+  html, body {
+    width: 1920px;
+    height: 1080px;
+    overflow: hidden;
+    background: var(--navy);
+    font-family: 'DM Sans', sans-serif;
+    color: var(--white);
+  }
+
+  /* ── BACKGROUND ── */
+  .bg {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 70% 50%, #1a3a5c55 0%, transparent 70%),
+      radial-gradient(ellipse 40% 40% at 10% 80%, #c9a84c18 0%, transparent 60%),
+      linear-gradient(135deg, #0a1628 0%, #112240 50%, #0d1e36 100%);
+  }
+
+  /* Grid overlay */
+  .bg::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(201,168,76,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(201,168,76,0.04) 1px, transparent 1px);
+    background-size: 80px 80px;
+  }
+
+  /* Diagonal accent bar */
+  .accent-bar {
+    position: absolute;
+    top: 0; right: 320px;
+    width: 3px;
+    height: 100%;
+    background: linear-gradient(180deg, transparent, var(--gold) 30%, var(--gold) 70%, transparent);
+    opacity: .35;
+  }
+
+  /* ── HEADER STRIP ── */
+  .header {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 90px;
+    display: flex;
+    align-items: center;
+    padding: 0 80px;
+    border-bottom: 1px solid rgba(201,168,76,.25);
+    background: rgba(10,22,40,.6);
+    backdrop-filter: blur(4px);
+    z-index: 10;
+  }
+
+  .logo-area {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+  }
+
+  .logo-icon {
+    width: 48px; height: 48px;
+    border: 2px solid var(--gold);
+    border-radius: 4px;
+    display: grid;
+    place-items: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    color: var(--gold);
+    font-weight: 700;
+  }
+
+  .logo-text {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: .08em;
+    color: var(--white);
+  }
+
+  .logo-sub {
+    font-size: 12px;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--silver);
+    margin-top: 2px;
+  }
+
+  .header-right {
+    margin-left: auto;
+    text-align: right;
+  }
+
+  #clock {
+    font-size: 36px;
+    font-weight: 300;
+    letter-spacing: .05em;
+    color: var(--white);
+    line-height: 1;
+  }
+
+  #date {
+    font-size: 13px;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    color: var(--silver);
+    margin-top: 4px;
+  }
+
+  /* ── SLIDE AREA ── */
+  .slides-wrapper {
+    position: absolute;
+    top: 90px; left: 0; right: 0; bottom: 100px;
+    overflow: hidden;
+  }
+
+  .slide {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0 140px 0 120px;
+    opacity: 0;
+    transform: translateX(60px);
+    transition: opacity .9s cubic-bezier(.4,0,.2,1), transform .9s cubic-bezier(.4,0,.2,1);
+    pointer-events: none;
+  }
+
+  .slide.active {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: auto;
+  }
+
+  .slide.leaving {
+    opacity: 0;
+    transform: translateX(-60px);
+    transition: opacity .7s ease, transform .7s ease;
+  }
+
+  /* Category badge */
+  .slide-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 36px;
+  }
+
+  .badge-line {
+    width: 40px;
+    height: 2px;
+    background: var(--gold);
+  }
+
+  .badge-label {
+    font-size: 13px;
+    letter-spacing: .3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 500;
+  }
+
+  .slide-number {
+    font-size: 11px;
+    letter-spacing: .2em;
+    color: var(--silver);
+    opacity: .6;
+  }
+
+  /* Main content */
+  .slide-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 68px;
+    font-weight: 700;
+    line-height: 1.1;
+    color: var(--white);
+    margin-bottom: 32px;
+    max-width: 1100px;
+  }
+
+  .slide-title em {
+    font-style: normal;
+    color: var(--gold-light);
+  }
+
+  .slide-body {
+    font-size: 26px;
+    font-weight: 300;
+    line-height: 1.6;
+    color: var(--silver);
+    max-width: 900px;
+  }
+
+  /* Icon decoration */
+  .slide-icon {
+    position: absolute;
+    right: 140px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 180px;
+    opacity: .06;
+    pointer-events: none;
+    line-height: 1;
+  }
+
+  /* Highlight box */
+  .highlight-box {
+    margin-top: 44px;
+    display: inline-flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 32px;
+    border: 1px solid rgba(201,168,76,.35);
+    border-left: 4px solid var(--gold);
+    background: rgba(201,168,76,.07);
+    border-radius: 4px;
+    font-size: 20px;
+    font-weight: 500;
+    color: var(--gold-light);
+    letter-spacing: .02em;
+  }
+
+  /* ── FOOTER TICKER ── */
+  .footer {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 100px;
+    border-top: 1px solid rgba(201,168,76,.2);
+    background: rgba(10,22,40,.75);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    z-index: 10;
+  }
+
+  .ticker-label {
+    flex-shrink: 0;
+    padding: 0 32px;
+    font-size: 13px;
+    letter-spacing: .25em;
+    text-transform: uppercase;
+    color: var(--navy);
+    background: var(--gold);
+    font-weight: 500;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    border-right: 2px solid var(--gold-light);
+  }
+
+  .ticker-track {
+    flex: 1;
+    overflow: hidden;
+    height: 100%;
+    display: flex;
+    align-items: center;
+  }
+
+  .ticker-inner {
+    display: flex;
+    gap: 0;
+    white-space: nowrap;
+    animation: ticker-scroll 40s linear infinite;
+  }
+
+  .ticker-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0 60px;
+    font-size: 20px;
+    font-weight: 300;
+    color: var(--silver);
+  }
+
+  .ticker-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--gold);
+    flex-shrink: 0;
+  }
+
+  @keyframes ticker-scroll {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  /* ── PROGRESS DOTS ── */
+  .progress-dots {
+    position: absolute;
+    bottom: 116px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 10px;
+    z-index: 20;
+  }
+
+  .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: rgba(168,184,204,.3);
+    transition: all .4s ease;
+  }
+
+  .dot.active {
+    background: var(--gold);
+    width: 28px;
+    border-radius: 4px;
+  }
+
+  /* ── PROGRESS BAR ── */
+  .progress-bar {
+    position: absolute;
+    bottom: 100px; left: 0;
+    height: 2px;
+    background: var(--gold);
+    width: 0%;
+    z-index: 15;
+    transition: none;
+  }
+
+  .progress-bar.running {
+    transition: width var(--slide-duration) linear;
+    width: 100%;
+  }
+</style>
+</head>
+<body>
+
+<div class="bg"></div>
+<div class="accent-bar"></div>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="logo-area">
+    <div class="logo-icon">A</div>
+    <div>
+      <div class="logo-text">ACME CORPORATION</div>
+      <div class="logo-sub">Comunicação Interna</div>
+    </div>
+  </div>
+  <div class="header-right">
+    <div id="clock">--:--:--</div>
+    <div id="date">--</div>
+  </div>
+</header>
+
+<!-- SLIDES -->
+<div class="slides-wrapper">
+
+  <div class="slide active" data-index="0">
+    <div class="slide-icon">📣</div>
+    <div class="slide-badge">
+      <div class="badge-line"></div>
+      <span class="badge-label">Comunicado Geral</span>
+      <span class="slide-number">01 / 04</span>
+    </div>
+    <div class="slide-title">Bem-vindos ao novo<br><em>Sistema de Comunicação</em></div>
+    <div class="slide-body">Este painel exibe avisos, comunicados e informações importantes para todos os colaboradores em tempo real.</div>
+    <div class="highlight-box">📌 Fique atento às atualizações diárias</div>
+  </div>
+
+  <div class="slide" data-index="1">
+    <div class="slide-icon">📅</div>
+    <div class="slide-badge">
+      <div class="badge-line"></div>
+      <span class="badge-label">Agenda</span>
+      <span class="slide-number">02 / 04</span>
+    </div>
+    <div class="slide-title">Reunião Geral de<br><em>Resultados — Abril</em></div>
+    <div class="slide-body">Todos os líderes e gestores estão convocados para a reunião de resultados do primeiro trimestre.</div>
+    <div class="highlight-box">🗓️ Quinta-feira, 03 de Abril · Sala Auditório · 09h00</div>
+  </div>
+
+  <div class="slide" data-index="2">
+    <div class="slide-icon">⚠️</div>
+    <div class="slide-badge">
+      <div class="badge-line"></div>
+      <span class="badge-label">Aviso Importante</span>
+      <span class="slide-number">03 / 04</span>
+    </div>
+    <div class="slide-title">Manutenção Preventiva<br><em>do Sistema de TI</em></div>
+    <div class="slide-body">O setor de TI realizará manutenção nos servidores internos. Salve seus arquivos e evite transações críticas no período.</div>
+    <div class="highlight-box">🔧 Sexta-feira, 04 de Abril · Das 22h às 02h</div>
+  </div>
+
+  <div class="slide" data-index="3">
+    <div class="slide-icon">🏆</div>
+    <div class="slide-badge">
+      <div class="badge-line"></div>
+      <span class="badge-label">Reconhecimento</span>
+      <span class="slide-number">04 / 04</span>
+    </div>
+    <div class="slide-title"><em>Parabéns</em> à equipe de<br>Projetos Especiais!</div>
+    <div class="slide-body">A equipe concluiu com excelência a entrega do Projeto Alfa, superando os indicadores de qualidade e prazo estabelecidos.</div>
+    <div class="highlight-box">⭐ Resultado: 98% de aprovação pelo cliente</div>
+  </div>
+
+</div>
+
+<!-- PROGRESS DOTS -->
+<div class="progress-dots">
+  <div class="dot active"></div>
+  <div class="dot"></div>
+  <div class="dot"></div>
+  <div class="dot"></div>
+</div>
+
+<!-- PROGRESS BAR -->
+<div class="progress-bar" id="progressBar"></div>
+
+<!-- FOOTER TICKER -->
+<footer class="footer">
+  <div class="ticker-label">Informativos</div>
+  <div class="ticker-track">
+    <div class="ticker-inner" id="tickerInner"></div>
+  </div>
+</footer>
+
+<script>
+  // ── CLOCK ──
+  function updateClock() {
+    const now = new Date();
+    document.getElementById('clock').textContent =
+      now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    document.getElementById('date').textContent =
+      now.toLocaleDateString('pt-BR', { weekday: 'long', day: '2-digit', month: 'long', year: 'numeric' });
+  }
+  updateClock();
+  setInterval(updateClock, 1000);
+
+  // ── TICKER ──
+  const tickerMessages = [
+    'Refeitório: cardápio desta semana disponível no portal do colaborador',
+    'RH: prazo para atualização cadastral encerra em 15 de Abril',
+    'Segurança: use sempre o crachá de identificação nas dependências da empresa',
+    'Novo ramal do suporte técnico: (21) 3000-0001 — atendimento 24h',
+    'Vagas internas disponíveis: acesse o portal de carreiras e candidate-se',
+    'Próximo evento: Semana de Saúde e Bem-estar — 22 a 26 de Abril',
+  ];
+
+  const inner = document.getElementById('tickerInner');
+  // Duplicate for seamless loop
+  [...tickerMessages, ...tickerMessages].forEach(msg => {
+    const item = document.createElement('span');
+    item.className = 'ticker-item';
+    item.innerHTML = `<span class="ticker-dot"></span>${msg}`;
+    inner.appendChild(item);
+  });
+
+  // ── SLIDES ──
+  const slides = document.querySelectorAll('.slide');
+  const dots   = document.querySelectorAll('.dot');
+  const bar    = document.getElementById('progressBar');
+  const DURATION = 8000;
+  let current = 0;
+  let timer;
+
+  function goTo(index) {
+    slides[current].classList.add('leaving');
+    dots[current].classList.remove('active');
+
+    setTimeout(() => {
+      slides[current].classList.remove('active', 'leaving');
+      current = index;
+      slides[current].classList.add('active');
+      dots[current].classList.add('active');
+    }, 700);
+
+    // Progress bar reset & run
+    bar.classList.remove('running');
+    bar.style.transition = 'none';
+    bar.style.width = '0%';
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      bar.style.transition = `width ${DURATION}ms linear`;
+      bar.classList.add('running');
+    }));
+  }
+
+  function next() {
+    goTo((current + 1) % slides.length);
+  }
+
+  function startAuto() {
+    clearInterval(timer);
+    timer = setInterval(next, DURATION);
+  }
+
+  // Init
+  bar.style.transition = `width ${DURATION}ms linear`;
+  bar.classList.add('running');
+  startAuto();
+</script>
+</body>
+</html>
