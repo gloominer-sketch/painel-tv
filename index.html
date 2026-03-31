@@ -4,49 +4,49 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Banner TV - Avisos e Comunicados</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500&display=swap%22 rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
+ 
   :root {
-    --navy: #0a1628;
-    --navy-mid: #112240;
-    --navy-light: #1a3a5c;
-    --gold: #c9a84c;
-    --gold-light: #e8c96e;
-    --silver: #a8b8cc;
-    --white: #f4f7fb;
+    --navy: #1A7733;
+    --navy-mid: #155e28;
+    --navy-light: #218a3d;
+    --gold: #ffffff;
+    --gold-light: #e0e0e0;
+    --silver: #1a1a1a;
+    --white: #000000;
     --slide-duration: 8s;
   }
-
+ 
   html, body {
     width: 1920px;
     height: 1080px;
     overflow: hidden;
     background: var(--navy);
-    font-family: 'DM Sans', sans-serif;
+    font-family: "Poppins", sans-serif;
     color: var(--white);
   }
-
+ 
   /* ── BACKGROUND ── */
   .bg {
     position: absolute; inset: 0;
     background:
-      radial-gradient(ellipse 80% 60% at 70% 50%, #1a3a5c55 0%, transparent 70%),
-      radial-gradient(ellipse 40% 40% at 10% 80%, #c9a84c18 0%, transparent 60%),
-      linear-gradient(135deg, #0a1628 0%, #112240 50%, #0d1e36 100%);
+      radial-gradient(ellipse 80% 60% at 70% 50%, #218a3d55 0%, transparent 70%),
+      radial-gradient(ellipse 40% 40% at 10% 80%, #ffffff18 0%, transparent 60%),
+      linear-gradient(130deg, #1A7733 0%, #1d284a 50%, #1a7733 100%);
   }
-
+ 
   /* Grid overlay */
   .bg::before {
     content: '';
     position: absolute; inset: 0;
     background-image:
-      linear-gradient(rgba(201,168,76,0.04) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(201,168,76,0.04) 1px, transparent 1px);
+      linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
     background-size: 80px 80px;
   }
-
+ 
   /* Diagonal accent bar */
   .accent-bar {
     position: absolute;
@@ -56,7 +56,7 @@
     background: linear-gradient(180deg, transparent, var(--gold) 30%, var(--gold) 70%, transparent);
     opacity: .35;
   }
-
+ 
   /* ── HEADER STRIP ── */
   .header {
     position: absolute;
@@ -65,74 +65,75 @@
     display: flex;
     align-items: center;
     padding: 0 80px;
-    border-bottom: 1px solid rgba(201,168,76,.25);
-    background: rgba(10,22,40,.6);
+    border-bottom: 1px solid rgba(255,255,255,.25);
+    background: #101b24;
     backdrop-filter: blur(4px);
     z-index: 10;
   }
-
+ 
   .logo-area {
     display: flex;
     align-items: center;
     gap: 18px;
   }
-
+ 
   .logo-icon {
-    width: 48px; height: 48px;
-    border: 2px solid var(--gold);
     border-radius: 4px;
     display: grid;
     place-items: center;
-    font-family: 'Playfair Display', serif;
+    font-family: "Poppins", sans-serif;
     font-size: 22px;
-    color: var(--gold);
+    color: #ffffff;
     font-weight: 700;
   }
-
+ 
   .logo-text {
-    font-family: 'Playfair Display', serif;
+    font-family: "Poppins", sans-serif;
+    place-items: center;
     font-size: 22px;
     font-weight: 600;
     letter-spacing: .08em;
-    color: var(--white);
+    color: #ffffff;
   }
-
+ 
   .logo-sub {
     font-size: 12px;
     letter-spacing: .2em;
     text-transform: uppercase;
-    color: var(--silver);
+    color: #ffffff;
     margin-top: 2px;
   }
-
+ 
   .header-right {
     margin-left: auto;
     text-align: right;
   }
-
+ 
   #clock {
     font-size: 36px;
     font-weight: 300;
     letter-spacing: .05em;
-    color: var(--white);
+    font-family: "Poppins", sans-serif;
+    color: #ffffff;
     line-height: 1;
   }
-
+ 
   #date {
     font-size: 13px;
     letter-spacing: .15em;
+    font-family: "Poppins", sans-serif;
     text-transform: uppercase;
-    color: var(--silver);
+    color: #ffffff;
     margin-top: 4px;
   }
-
+ 
   /* ── SLIDE AREA ── */
   .slides-wrapper {
     position: absolute;
     top: 90px; left: 0; right: 0; bottom: 100px;
     overflow: hidden;
   }
-
+ 
   .slide {
     position: absolute;
     inset: 0;
@@ -145,19 +146,19 @@
     transition: opacity .9s cubic-bezier(.4,0,.2,1), transform .9s cubic-bezier(.4,0,.2,1);
     pointer-events: none;
   }
-
+ 
   .slide.active {
     opacity: 1;
     transform: translateX(0);
     pointer-events: auto;
   }
-
+ 
   .slide.leaving {
     opacity: 0;
     transform: translateX(-60px);
     transition: opacity .7s ease, transform .7s ease;
   }
-
+ 
   /* Category badge */
   .slide-badge {
     display: inline-flex;
@@ -165,52 +166,51 @@
     gap: 10px;
     margin-bottom: 36px;
   }
-
+ 
   .badge-line {
     width: 40px;
     height: 2px;
     background: var(--gold);
   }
-
+ 
   .badge-label {
     font-size: 13px;
     letter-spacing: .3em;
     text-transform: uppercase;
-    color: var(--gold);
+    color: #ffffff;
     font-weight: 500;
   }
-
+ 
   .slide-number {
     font-size: 11px;
     letter-spacing: .2em;
-    color: var(--silver);
-    opacity: .6;
+    color: #ffffff;
+    opacity: .5;
   }
-
-  /* Main content */
+ 
   .slide-title {
-    font-family: 'Playfair Display', serif;
+    font-family: "Poppins", sans-serif;
     font-size: 68px;
     font-weight: 700;
     line-height: 1.1;
-    color: var(--white);
+    color: #ffffff;
     margin-bottom: 32px;
     max-width: 1100px;
   }
-
+ 
   .slide-title em {
     font-style: normal;
-    color: var(--gold-light);
+    color: #ffffff;
   }
-
+ 
   .slide-body {
     font-size: 26px;
-    font-weight: 300;
+    font-weight: 400;
     line-height: 1.6;
-    color: var(--silver);
+    color: #ffffff;
     max-width: 900px;
   }
-
+ 
   /* Icon decoration */
   .slide-icon {
     position: absolute;
@@ -222,7 +222,7 @@
     pointer-events: none;
     line-height: 1;
   }
-
+ 
   /* Highlight box */
   .highlight-box {
     margin-top: 44px;
@@ -230,45 +230,45 @@
     align-items: center;
     gap: 16px;
     padding: 16px 32px;
-    border: 1px solid rgba(201,168,76,.35);
+    border: 1px solid rgba(255,255,255,.35);
     border-left: 4px solid var(--gold);
-    background: rgba(201,168,76,.07);
+    background: rgba(255,255,255,.1);
     border-radius: 4px;
     font-size: 20px;
     font-weight: 500;
-    color: var(--gold-light);
+    color: #ffffff;
     letter-spacing: .02em;
   }
-
+ 
   /* ── FOOTER TICKER ── */
   .footer {
     position: absolute;
     bottom: 0; left: 0; right: 0;
     height: 100px;
-    border-top: 1px solid rgba(201,168,76,.2);
-    background: rgba(10,22,40,.75);
+    border-top: 1px solid rgba(255,255,255,.2);
+    background: rgba(26,119,51,.85);
     backdrop-filter: blur(4px);
     display: flex;
     align-items: center;
     overflow: hidden;
     z-index: 10;
   }
-
+ 
   .ticker-label {
     flex-shrink: 0;
     padding: 0 32px;
     font-size: 13px;
     letter-spacing: .25em;
     text-transform: uppercase;
-    color: var(--navy);
-    background: var(--gold);
+    color: #1A7733;
+    background: #ffffff;
     font-weight: 500;
     height: 100%;
     display: flex;
     align-items: center;
-    border-right: 2px solid var(--gold-light);
+    border-right: 2px solid #e0e0e0;
   }
-
+ 
   .ticker-track {
     flex: 1;
     overflow: hidden;
@@ -276,14 +276,14 @@
     display: flex;
     align-items: center;
   }
-
+ 
   .ticker-inner {
     display: flex;
     gap: 0;
     white-space: nowrap;
     animation: ticker-scroll 40s linear infinite;
   }
-
+ 
   .ticker-item {
     display: inline-flex;
     align-items: center;
@@ -291,9 +291,9 @@
     padding: 0 60px;
     font-size: 20px;
     font-weight: 300;
-    color: var(--silver);
+    color: #ffffff;
   }
-
+ 
   .ticker-dot {
     width: 5px;
     height: 5px;
@@ -301,12 +301,12 @@
     background: var(--gold);
     flex-shrink: 0;
   }
-
+ 
   @keyframes ticker-scroll {
     0%   { transform: translateX(0); }
     100% { transform: translateX(-50%); }
   }
-
+ 
   /* ── PROGRESS DOTS ── */
   .progress-dots {
     position: absolute;
@@ -317,20 +317,20 @@
     gap: 10px;
     z-index: 20;
   }
-
+ 
   .dot {
     width: 8px; height: 8px;
     border-radius: 50%;
     background: rgba(168,184,204,.3);
     transition: all .4s ease;
   }
-
+ 
   .dot.active {
     background: var(--gold);
     width: 28px;
     border-radius: 4px;
   }
-
+ 
   /* ── PROGRESS BAR ── */
   .progress-bar {
     position: absolute;
@@ -341,7 +341,7 @@
     z-index: 15;
     transition: none;
   }
-
+ 
   .progress-bar.running {
     transition: width var(--slide-duration) linear;
     width: 100%;
@@ -349,17 +349,17 @@
 </style>
 </head>
 <body>
-
+ 
 <div class="bg"></div>
 <div class="accent-bar"></div>
-
+ 
 <!-- HEADER -->
 <header class="header">
   <div class="logo-area">
-    <div class="logo-icon">A</div>
+    <div class="logo-icon"><img src="Ícone-da-Logo-Valgroup-Colorido.ico" height="75px" alt="" srcset=""></div>
     <div>
-      <div class="logo-text">ACME CORPORATION</div>
-      <div class="logo-sub">Comunicação Interna</div>
+      <div class="logo-text">VALGROUP</div>
+      <sub class="logo-text">Informativo diário</sub>
     </div>
   </div>
   <div class="header-right">
@@ -367,60 +367,58 @@
     <div id="date">--</div>
   </div>
 </header>
-
+ 
 <!-- SLIDES -->
 <div class="slides-wrapper">
-
   <div class="slide active" data-index="0">
     <div class="slide-icon">📣</div>
     <div class="slide-badge">
       <div class="badge-line"></div>
       <span class="badge-label">Comunicado Geral</span>
-      <span class="slide-number">01 / 04</span>
+     <span class="slide-number dataHoje"></span>
+ 
     </div>
-    <div class="slide-title">EU TE AMO ARIANE<br><em>ME DESCULPE</em></div>
-    <div class="slide-body">Este painel exibe pedidos de desculpa de forma real e sincera do Geovani.</div>
-    <div class="highlight-box">📌 Fique atento às novas desculpas diárias</div>
+    <div class="slide-title">Bem-vindos a <br><em>Valgroup SC1</em></div>
+    <div class="slide-body">Este painel exibe avisos, comunicados e informações importantes para todos os colaboradores em tempo real.</div>
+    <div class="highlight-box">📌 Fique atento às atualizações diárias</div>
   </div>
-
+ 
   <div class="slide" data-index="1">
     <div class="slide-icon">📅</div>
     <div class="slide-badge">
       <div class="badge-line"></div>
       <span class="badge-label">Agenda</span>
-      <span class="slide-number">02 / 04</span>
+       <span class="slide-number dataHoje"></span>
     </div>
-    <div class="slide-title">DESCULPA MEU AMOR<br><em>DESCULPAAAA</em></div>
-    <div class="slide-body">Todos os dias penso em voce.</div>
-    <div class="highlight-box">🗓️ Quinta-feira, 03 de Abril · Sala Auditório · 09h00</div>
+    <div class="slide-title">Inventário Geral<br><em>Outubro 2026</em></div>
+    <div class="slide-body">Inventário geral com acompanhamento de Auditorias e Custos </div>
+    <div class="highlight-box">🗓️ Quinta-feira, 20 de Outubro a 23 de Outubro· Estoque · 07h00</div>
   </div>
-
+ 
   <div class="slide" data-index="2">
     <div class="slide-icon">⚠️</div>
     <div class="slide-badge">
       <div class="badge-line"></div>
       <span class="badge-label">Aviso Importante</span>
-      <span class="slide-number">03 / 04</span>
+      <span class="slide-number dataHoje"></span>
     </div>
-    <div class="slide-title">te amo fala comigo<br><em>amo você minhas princesa</em></div>
-    <div class="slide-body">O setor de TI é o mais privilegiado por que você faz parte</div>
-    <div class="highlight-box">🔧 Sexta-feira, 04 de Abril · Das 22h às 02h</div>
+    <div class="slide-title">Fiquem atentos aos apontamentos e localizações<br><em>No Sistema SAP</em></div>
+    <div class="slide-body">Quaisquer dúvidas ou problemas relacionado a divergência de posição fisica/sistemica, acionar o time de estoque.</div>
   </div>
-
+ 
   <div class="slide" data-index="3">
     <div class="slide-icon">🏆</div>
     <div class="slide-badge">
       <div class="badge-line"></div>
       <span class="badge-label">Reconhecimento</span>
-      <span class="slide-number">04 / 04</span>
+      <span class="slide-number dataHoje"></span>
     </div>
-    <div class="slide-title"><em>TE AMO</em> AMO <br>VOCÊ!</div>
-    <div class="slide-body">FALA COMIGO TE AMO.</div>
-    <div class="highlight-box">⭐ Resultado: 98% de aprovação pelo cliente</div>
+    <div class="slide-title"><em>Parabéns</em> ao <br>Estoque</div>
+    <div class="slide-body">A equipe alcançou os 99,8% de acuracidade de Estoque.</div>
+    <div class="highlight-box">⭐ Resultado: 99,8% de acuracidade</div>
   </div>
-
 </div>
-
+ 
 <!-- PROGRESS DOTS -->
 <div class="progress-dots">
   <div class="dot active"></div>
@@ -428,10 +426,10 @@
   <div class="dot"></div>
   <div class="dot"></div>
 </div>
-
+ 
 <!-- PROGRESS BAR -->
 <div class="progress-bar" id="progressBar"></div>
-
+ 
 <!-- FOOTER TICKER -->
 <footer class="footer">
   <div class="ticker-label">Informativos</div>
@@ -439,7 +437,7 @@
     <div class="ticker-inner" id="tickerInner"></div>
   </div>
 </footer>
-
+ 
 <script>
   // ── CLOCK ──
   function updateClock() {
@@ -451,17 +449,18 @@
   }
   updateClock();
   setInterval(updateClock, 1000);
-
+ 
   // ── TICKER ──
   const tickerMessages = [
-    'AMO',
-    'VC',
-    'DE TODO',
-    'O MEU',
-    'CORAÇÃO',
-    'S2S2',
+    'Refeitório: cardápio desta semana disponível no App Tá na mão',
+    'RH: prazo para o acerto do ponto encerra dia 08/04',
+    'Segurança: use sempre o crachá de identificação nas dependências da empresa',
+    'Novo ramal do suporte técnico: (21) 3000-0001 — atendimento 24h',
+    'Vagas internas disponíveis: acesse o portal de carreiras e candidate-se',
+    'Próximo evento: Semana de Saúde e Bem-estar — 22 a 26 de Abril',
+    'Utilizar sempre os EPIs conforme a NR6'
   ];
-
+ 
   const inner = document.getElementById('tickerInner');
   // Duplicate for seamless loop
   [...tickerMessages, ...tickerMessages].forEach(msg => {
@@ -470,26 +469,26 @@
     item.innerHTML = `<span class="ticker-dot"></span>${msg}`;
     inner.appendChild(item);
   });
-
+ 
   // ── SLIDES ──
   const slides = document.querySelectorAll('.slide');
   const dots   = document.querySelectorAll('.dot');
   const bar    = document.getElementById('progressBar');
-  const DURATION = 8000;
+  const DURATION = 5000;
   let current = 0;
   let timer;
-
+ 
   function goTo(index) {
     slides[current].classList.add('leaving');
     dots[current].classList.remove('active');
-
+ 
     setTimeout(() => {
       slides[current].classList.remove('active', 'leaving');
       current = index;
       slides[current].classList.add('active');
       dots[current].classList.add('active');
     }, 700);
-
+ 
     // Progress bar reset & run
     bar.classList.remove('running');
     bar.style.transition = 'none';
@@ -499,20 +498,22 @@
       bar.classList.add('running');
     }));
   }
-
+ 
   function next() {
     goTo((current + 1) % slides.length);
   }
-
+ 
   function startAuto() {
     clearInterval(timer);
     timer = setInterval(next, DURATION);
   }
-
+ 
   // Init
   bar.style.transition = `width ${DURATION}ms linear`;
   bar.classList.add('running');
   startAuto();
+ 
 </script>
+<script src="script.js"></script>
 </body>
 </html>
