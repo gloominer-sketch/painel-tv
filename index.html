@@ -14,7 +14,7 @@
     --green-light: #218a3d;
     --white: #ffffff;
     --text-dark: #333333;
-    --text-gray: #666666;
+    --text-gray: #555555;
     --slide-duration: 8s;
   }
 
@@ -22,7 +22,7 @@
     width: 1920px;
     height: 1080px;
     overflow: hidden;
-    background: #f4f7f5; /* Fundo mais branco/cinza claro */
+    background: #f4f7f5; 
     font-family: "Poppins", sans-serif;
     color: var(--text-dark);
   }
@@ -57,7 +57,7 @@
   .header {
     position: absolute;
     top: 0; left: 0; right: 0;
-    height: 90px;
+    height: 120px; /* Aumentado */
     display: flex;
     align-items: center;
     padding: 0 80px;
@@ -66,17 +66,17 @@
     z-index: 10;
   }
 
-  .logo-area { display: flex; align-items: center; gap: 18px; }
-  .logo-text { font-size: 24px; font-weight: 700; letter-spacing: .08em; color: var(--green); }
-  .logo-sub { font-size: 12px; letter-spacing: .2em; text-transform: uppercase; color: var(--text-gray); margin-top: 2px; }
+  .logo-area { display: flex; align-items: center; gap: 24px; }
+  .logo-text { font-size: 34px; font-weight: 700; letter-spacing: .08em; color: var(--green); }
+  .logo-sub { font-size: 16px; letter-spacing: .2em; text-transform: uppercase; color: var(--text-gray); margin-top: 2px; }
   .header-right { margin-left: auto; text-align: right; }
-  #clock { font-size: 38px; font-weight: 500; letter-spacing: .05em; color: var(--green); line-height: 1; }
-  #date { font-size: 13px; letter-spacing: .15em; text-transform: uppercase; color: var(--text-gray); margin-top: 4px; font-weight: 500;}
+  #clock { font-size: 52px; font-weight: 500; letter-spacing: .05em; color: var(--green); line-height: 1; }
+  #date { font-size: 18px; letter-spacing: .15em; text-transform: uppercase; color: var(--text-gray); margin-top: 8px; font-weight: 500;}
 
   /* ── SLIDES ── */
   .slides-wrapper {
     position: absolute;
-    top: 90px; left: 0; right: 0; bottom: 100px;
+    top: 120px; left: 0; right: 0; bottom: 120px; /* Ajustado para dar mais espaço */
     overflow: hidden;
   }
 
@@ -94,32 +94,35 @@
   .slide.leaving { opacity: 0; transform: translateX(-60px); transition: opacity .7s ease, transform .7s ease; }
 
   .slide-badge {
-    display: inline-flex; align-items: center; gap: 14px; margin-bottom: 32px;
+    display: inline-flex; align-items: center; gap: 18px; margin-bottom: 36px;
   }
-  .badge-line { width: 50px; height: 3px; background: var(--green); border-radius: 2px; }
-  .badge-label { font-size: 14px; letter-spacing: .35em; text-transform: uppercase; color: var(--green); font-weight: 600; }
+  .badge-line { width: 60px; height: 4px; background: var(--green); border-radius: 2px; }
+  .badge-label { font-size: 20px; letter-spacing: .35em; text-transform: uppercase; color: var(--green); font-weight: 600; }
 
   .slide-title {
-    font-size: 72px; font-weight: 700; line-height: 1.1;
-    color: var(--green); margin-bottom: 28px; max-width: 1100px;
+    font-size: 96px; /* Bem maior */
+    font-weight: 700; line-height: 1.1;
+    color: var(--green); margin-bottom: 32px; max-width: 1300px;
   }
   .slide-title em { font-style: normal; color: var(--green-light); }
 
   .slide-body {
-    font-size: 28px; font-weight: 400; line-height: 1.6;
-    color: var(--text-gray); max-width: 900px;
+    font-size: 40px; /* Bem maior */
+    font-weight: 400; line-height: 1.5;
+    color: var(--text-gray); max-width: 1200px;
   }
 
   .slide-icon {
-    position: absolute; right: 140px; top: 50%;
+    position: absolute; right: 120px; top: 50%;
     transform: translateY(-50%);
-    font-size: 200px; opacity: .05;
+    font-size: 280px; /* Ícone maior */
+    opacity: .05;
     pointer-events: none; line-height: 1;
   }
 
   /* ── COUNTDOWN BLOCK ── */
   .countdown-block {
-    margin-top: 40px;
+    margin-top: 50px;
     display: inline-flex; align-items: stretch; gap: 0;
     border-radius: 12px; overflow: hidden;
     box-shadow: 0 10px 30px rgba(26, 119, 51, 0.08);
@@ -128,12 +131,12 @@
   .count-number {
     background: rgba(26, 119, 51, 0.05);
     border: 1px solid rgba(26, 119, 51, 0.15);
-    padding: 20px 50px;
-    font-size: 100px;
+    padding: 20px 60px;
+    font-size: 130px; /* Número gigante */
     font-weight: 700;
     color: var(--green);
     line-height: 1;
-    min-width: 220px;
+    min-width: 260px;
     text-align: center;
     display: flex; align-items: center; justify-content: center;
   }
@@ -141,28 +144,29 @@
   .count-label {
     background: var(--green);
     color: #fff;
-    padding: 20px 48px;
-    font-size: 28px;
+    padding: 20px 50px;
+    font-size: 36px; /* Texto maior */
     font-weight: 700;
     letter-spacing: .06em;
     text-transform: uppercase;
     line-height: 1;
-    display: flex; flex-direction: column; gap: 6px;
+    display: flex; flex-direction: column; gap: 8px;
     align-items: flex-start; justify-content: center;
   }
 
   .count-label span {
-    font-size: 14px; font-weight: 500; letter-spacing: .25em;
+    font-size: 18px; font-weight: 500; letter-spacing: .25em;
     opacity: .85; text-transform: uppercase;
   }
 
   /* ── URGENCY BADGE ── */
   .urgency-badge {
-    position: absolute; top: 60px; right: 140px;
+    position: absolute; top: 80px; right: 120px;
     background: #d32f2f;
     color: #fff;
-    font-size: 22px; font-weight: 700; letter-spacing: .15em; text-transform: uppercase;
-    padding: 14px 32px; border-radius: 8px;
+    font-size: 28px; /* Maior */
+    font-weight: 700; letter-spacing: .15em; text-transform: uppercase;
+    padding: 18px 40px; border-radius: 10px;
     animation: pulse-badge 2s ease-in-out infinite;
     box-shadow: 0 4px 15px rgba(211, 47, 47, 0.3);
   }
@@ -176,7 +180,7 @@
   .footer {
     position: absolute;
     bottom: 0; left: 0; right: 0;
-    height: 100px;
+    height: 120px; /* Aumentado */
     border-top: 1px solid rgba(26, 119, 51, 0.15);
     background: #ffffff;
     display: flex; align-items: center;
@@ -184,8 +188,8 @@
   }
 
   .ticker-label {
-    flex-shrink: 0; padding: 0 36px;
-    font-size: 13px; letter-spacing: .28em; text-transform: uppercase;
+    flex-shrink: 0; padding: 0 40px;
+    font-size: 18px; letter-spacing: .28em; text-transform: uppercase; /* Letra maior */
     color: #ffffff; background: var(--green); font-weight: 600;
     height: 100%; display: flex; align-items: center;
   }
@@ -197,28 +201,29 @@
   }
 
   .ticker-item {
-    display: inline-flex; align-items: center; gap: 14px;
-    padding: 0 64px; font-size: 20px; font-weight: 500; color: var(--text-dark);
+    display: inline-flex; align-items: center; gap: 18px;
+    padding: 0 80px; font-size: 28px; /* Texto rotativo maior */
+    font-weight: 500; color: var(--text-dark);
   }
 
-  .ticker-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); flex-shrink: 0; }
+  .ticker-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); flex-shrink: 0; }
 
   @keyframes ticker-scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 
   /* ── PROGRESS DOTS ── */
   .progress-dots {
-    position: absolute; bottom: 116px; left: 50%;
+    position: absolute; bottom: 140px; left: 50%;
     transform: translateX(-50%);
-    display: flex; gap: 12px; z-index: 20;
+    display: flex; gap: 16px; z-index: 20;
   }
 
-  .dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(26, 119, 51, 0.25); transition: all .4s ease; }
-  .dot.active { background: var(--green); width: 32px; border-radius: 4px; }
+  .dot { width: 12px; height: 12px; border-radius: 50%; background: rgba(26, 119, 51, 0.25); transition: all .4s ease; }
+  .dot.active { background: var(--green); width: 40px; border-radius: 6px; }
 
   /* ── PROGRESS BAR ── */
   .progress-bar {
-    position: absolute; bottom: 100px; left: 0;
-    height: 3px; background: var(--green);
+    position: absolute; bottom: 120px; left: 0;
+    height: 4px; background: var(--green);
     width: 0%; z-index: 15; transition: none;
   }
   .progress-bar.running { transition: width 8000ms linear; width: 100%; }
@@ -232,7 +237,7 @@
 <header class="header">
   <div class="logo-area">
     <div class="logo-icon">
-      <img src="Ícone-da-Logo-Valgroup-Colorido.ico" height="60px" alt="" onerror="this.style.display='none'">
+      <img src="Ícone-da-Logo-Valgroup-Colorido.ico" height="75px" alt="" onerror="this.style.display='none'">
     </div>
     <div>
       <div class="logo-text">VALGROUP</div>
