@@ -3,370 +3,454 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Banner TV - Avisos e Comunicados</title>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<title>Comunicado Interno — Logística SP10</title>
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
   :root {
-    --green: #1A7733;
-    --green-mid: #155e28;
-    --green-light: #218a3d;
-    --white: #ffffff;
-    --text-dark: #333333;
-    --text-gray: #555555;
-    --slide-duration: 8s;
+    /* Paleta de Cores Institucional */
+    --verde-escuro:  #0a3820;
+    --verde-principal: #0e6b3a;
+    --verde-medio:   #16884a;
+    --verde-brilho:  #22a35d;
+    --verde-claro:   #eaf6ee;
+    --texto-suave:   #cfe8d9;
+    --branco:        #ffffff;
+    --dot-color:     rgba(255,255,255,0.30);
   }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
 
   html, body {
-    width: 1920px;
-    height: 1080px;
+    width: 100%; 
+    height: 100%;
     overflow: hidden;
-    background: #f4f7f5; 
-    font-family: "Poppins", sans-serif;
-    color: var(--text-dark);
+    font-family: 'Segoe UI', 'Poppins', sans-serif;
+    background: var(--verde-escuro);
   }
 
-  /* ── BACKGROUND CLARO ── */
-  .bg {
-    position: absolute; inset: 0;
-    background:
-      radial-gradient(ellipse 80% 60% at 70% 50%, rgba(26, 119, 51, 0.05) 0%, transparent 70%),
-      radial-gradient(ellipse 40% 40% at 10% 80%, rgba(26, 119, 51, 0.03) 0%, transparent 60%),
-      linear-gradient(130deg, #ffffff 0%, #f4f7f5 50%, #e8eee9 100%);
+  /* ===================== SISTEMA DE SLIDES (3 Telas) ===================== */
+  .slider {
+    display: flex;
+    width: 300vw; /* 3 telas de 100vw cada */
+    height: 100vh;
+    /*
+       NOVO FLUXO: Centro -> Direita -> Esquerda -> Centro (loop)
+       Posições físicas no HTML:  [Esquerda=0vw] [Centro=-100vw] [Direita=-200vw]
+       DURAÇÃO TOTAL: 78 Segundos
+       - Centro parado:   18s
+       - transição:        2,6s
+       - Direita parado:  18s
+       - transição direta p/ Esquerda: 2,6s  (pula o centro no meio, como pedido)
+       - Esquerda parado: 30s (mais informação)
+       - transição de volta ao Centro: 2,6s (fecha o loop)
+    */
+    animation: trocarSlide 78s cubic-bezier(0.77, 0, 0.17, 1) infinite;
+    will-change: transform;
   }
 
-  .bg::before {
+  /*
+    Linha do tempo (78s = 100%):
+    0%      -> 100% de 78s = 0.0s   | chega no Centro
+    23.07%  -> 18.0s                | fim do repouso no Centro
+    26.41%  -> 20.6s                | chega na Direita (transição 2.6s)
+    49.48%  -> 38.6s                | fim do repouso na Direita
+    52.82%  -> 41.2s                | chega na Esquerda (transição 2.6s, PULA o centro)
+    91.28%  -> 71.2s                | fim do repouso na Esquerda (30s parado)
+    94.62% / 100% -> 73.8s / 78s    | volta ao Centro (transição 2.6s) e reinicia o loop
+  */
+  @keyframes trocarSlide {
+
+    /* 1. CENTRO (Cronograma) -> parado 18s */
+    0%, 23.07% { transform: translateX(-100vw); }
+
+    /* transição para Direita (2,6s) */
+
+    /* 2. DIREITA (Duplas 03/08 - Produção) -> parado 18s */
+    26.41%, 49.48% { transform: translateX(-200vw); }
+
+    /* transição DIRETO para Esquerda (2,6s) — não passa pelo centro */
+
+    /* 3. ESQUERDA (Duplas 04/08 - Estoque) -> parado 30s */
+    52.82%, 91.28% { transform: translateX(0vw); }
+
+    /* transição de volta para Centro (2,6s), fechando o ciclo */
+
+    /* 4. CENTRO novamente, para reiniciar o loop suavemente */
+    94.62%, 100% { transform: translateX(-100vw); }
+  }
+
+  /* ===================== PALCO (Fundo Verde Padrão) ===================== */
+  .stage {
+    position: relative;
+    width: 100vw; 
+    height: 100vh;
+    flex-shrink: 0; 
+    overflow: hidden;
+    background: linear-gradient(155deg, var(--verde-principal) 0%, var(--verde-escuro) 62%, #062615 100%);
+  }
+
+  /* Padrão de Pontos no Fundo */
+  .stage::before {
     content: '';
     position: absolute; inset: 0;
-    background-image:
-      linear-gradient(rgba(26, 119, 51, 0.06) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(26, 119, 51, 0.06) 1px, transparent 1px);
-    background-size: 80px 80px;
-  }
-
-  .accent-bar {
-    position: absolute;
-    top: 0; right: 320px;
-    width: 3px;
-    height: 100%;
-    background: linear-gradient(180deg, transparent, rgba(26, 119, 51, 0.15) 30%, rgba(26, 119, 51, 0.15) 70%, transparent);
-  }
-
-  /* ── HEADER ── */
-  .header {
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 120px; /* Aumentado */
-    display: flex;
-    align-items: center;
-    padding: 0 80px;
-    border-bottom: 1px solid rgba(26, 119, 51, 0.15);
-    background: rgba(255, 255, 255, 0.85);
-    z-index: 10;
-  }
-
-  .logo-area { display: flex; align-items: center; gap: 24px; }
-  .logo-text { font-size: 34px; font-weight: 700; letter-spacing: .08em; color: var(--green); }
-  .logo-sub { font-size: 16px; letter-spacing: .2em; text-transform: uppercase; color: var(--text-gray); margin-top: 2px; }
-  .header-right { margin-left: auto; text-align: right; }
-  #clock { font-size: 52px; font-weight: 500; letter-spacing: .05em; color: var(--green); line-height: 1; }
-  #date { font-size: 18px; letter-spacing: .15em; text-transform: uppercase; color: var(--text-gray); margin-top: 8px; font-weight: 500;}
-
-  /* ── SLIDES ── */
-  .slides-wrapper {
-    position: absolute;
-    top: 120px; left: 0; right: 0; bottom: 120px; /* Ajustado para dar mais espaço */
-    overflow: hidden;
-  }
-
-  .slide {
-    position: absolute; inset: 0;
-    display: flex; flex-direction: column; justify-content: center;
-    padding: 0 160px 0 140px;
-    opacity: 0;
-    transform: translateX(60px);
-    transition: opacity .9s cubic-bezier(.4,0,.2,1), transform .9s cubic-bezier(.4,0,.2,1);
+    background-image: radial-gradient(var(--dot-color) 1.4px, transparent 1.4px);
+    background-size: 2.6vw 2.6vw;
+    opacity: 0.35;
     pointer-events: none;
   }
 
-  .slide.active { opacity: 1; transform: translateX(0); pointer-events: auto; }
-  .slide.leaving { opacity: 0; transform: translateX(-60px); transition: opacity .7s ease, transform .7s ease; }
-
-  .slide-badge {
-    display: inline-flex; align-items: center; gap: 18px; margin-bottom: 36px;
+  /* ===================== COMPONENTES COMUNS ===================== */
+  
+  /* Topo Fixo (Logo e Título) */
+  .topo {
+    position: relative;
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 3vw 3.4vw 1.8vw 3.4vw;
   }
-  .badge-line { width: 60px; height: 4px; background: var(--green); border-radius: 2px; }
-  .badge-label { font-size: 20px; letter-spacing: .35em; text-transform: uppercase; color: var(--green); font-weight: 600; }
+  .marca-topo { display: flex; flex-direction: column; gap: 0.3vw; }
+  .eyebrow { color: var(--texto-suave); font-size: 1vw; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; }
+  .titulo-principal { color: var(--branco); font-size: 4.2vw; font-weight: 800; letter-spacing: 0.01em; text-transform: uppercase; line-height: 1; }
 
-  .slide-title {
-    font-size: 96px; /* Bem maior */
-    font-weight: 700; line-height: 1.1;
-    color: var(--green); margin-bottom: 32px; max-width: 1300px;
+  /* Títulos de Contexto */
+  .info-fixo { position: relative; z-index: 5; padding: 0 3.4vw; }
+  .subtitulo { color: var(--branco); font-size: 2.1vw; font-weight: 800; letter-spacing: 0.01em; margin-bottom: 0.6vw; }
+  .intro { color: var(--texto-suave); font-size: 1.25vw; line-height: 1.5; max-width: 60vw; }
+
+  /* Rodapé Fixo */
+  .rodape { position: absolute; left: 0; right: 0; bottom: 0; z-index: 5; display: flex; align-items: center; justify-content: space-between; padding: 2vw 3.4vw; }
+  .programe-se { color: var(--branco); font-size: 1.7vw; font-weight: 800; display: flex; align-items: center; gap: 0.8vw; }
+  .programe-se::before { content: ''; width: 0.55vw; height: 0.55vw; background: var(--verde-brilho); border-radius: 50%; box-shadow: 0 0 1.2vw var(--verde-brilho); }
+  
+  /* Badge de Aviso (Live Dot) */
+  .live-badge { display: flex; align-items: center; gap: 0.6vw; background: rgba(255,255,255,0.1); padding: 0.5vw 1.3vw; border-radius: 100px; border: 1px solid rgba(255,255,255,0.2); }
+  .live-dot { width: 0.6vw; height: 0.6vw; border-radius: 50%; background: #ff5c5c; animation: pulsar 1.4s ease-in-out infinite; }
+  .live-texto { color: #fff; font-size: 0.95vw; font-weight: 700; letter-spacing: 0.1em; }
+  @keyframes pulsar { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.35; transform: scale(0.75); } }
+
+  /* ===================== COMPONENTES TELA: CRONOGRAMA (CENTRO) ===================== */
+  .faixa-wrap {
+    position: absolute; left: 0; right: 0; bottom: 10vh; z-index: 4; overflow: hidden;
+    background: rgba(0,0,0,0.18); border-top: 1px solid rgba(255,255,255,0.14); border-bottom: 1px solid rgba(255,255,255,0.14);
+    padding: 2.2vw 0;
   }
-  .slide-title em { font-style: normal; color: var(--green-light); }
+  .faixa-track { display: flex; align-items: center; width: max-content; animation: rolar 32s linear infinite; will-change: transform; }
+  @keyframes rolar { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+  .cartao { display: flex; align-items: center; gap: 1.6vw; padding: 0 4vw; border-right: 1px solid rgba(255,255,255,0.16); }
+  .cartao-hora { flex-shrink: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; background: var(--branco); color: var(--verde-principal); font-weight: 800; border-radius: 1vw; padding: 0.9vw 1.6vw; min-width: 8vw; line-height: 1.1; }
+  .cartao-hora .data { font-size: 1.5vw; letter-spacing: 0.02em; }
+  .cartao-hora .hora { font-size: 1vw; font-weight: 700; color: var(--verde-medio); margin-top: 0.2vw; }
+  .cartao-texto { max-width: 34vw; }
+  .cartao-label { color: var(--verde-brilho); font-size: 1vw; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.4vw; }
+  .cartao-desc { color: var(--branco); font-size: 1.45vw; font-weight: 400; line-height: 1.4; }
+  .cartao-desc b { font-weight: 800; color: var(--branco); background: linear-gradient(180deg, transparent 62%, rgba(34,163,93,0.55) 62%); }
 
-  .slide-body {
-    font-size: 40px; /* Bem maior */
-    font-weight: 400; line-height: 1.5;
-    color: var(--text-gray); max-width: 1200px;
+  /* ===================== COMPONENTES TELA: DUPLAS 03/08 (DIREITA) ===================== */
+  .duplas-wrap { position: absolute; left: 3.4vw; right: 3.4vw; top: 42vh; z-index: 5; display: flex; gap: 2vw; }
+  .cartao-dupla { flex: 1; background: rgba(0,0,0,0.18); border: 1px solid rgba(255,255,255,0.14); border-radius: 1vw; padding: 2.5vw; display: flex; flex-direction: column; gap: 1.2vw; backdrop-filter: blur(5px); }
+  .dupla-titulo { color: var(--verde-brilho); font-size: 1.1vw; font-weight: 800; text-transform: uppercase; letter-spacing: 0.15em; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 1vw; margin-bottom: 0.5vw; }
+  .colaborador { display: flex; align-items: center; gap: 1vw; color: var(--branco); font-size: 1.6vw; font-weight: 600; }
+  .icon-user { width: 2.5vw; height: 2.5vw; background: var(--verde-medio); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2vw; font-weight: 800; color: var(--branco); }
+
+  /* ===================== COMPONENTES TELA: DUPLAS 04/08 (ESQUERDA - DENSA) ===================== */
+
+  /* Nesta tela especificamente, encolhe topo/título p/ sobrar mais altura para os nomes */
+  .stage.tela-04 .topo { padding: 1.6vw 3.4vw 0.8vw 3.4vw; }
+  .stage.tela-04 .titulo-principal { font-size: 3vw; }
+  .stage.tela-04 .info-fixo { padding: 0 3.4vw; }
+  .stage.tela-04 .subtitulo { font-size: 1.7vw; margin-bottom: 0.3vw; }
+  .stage.tela-04 .intro { font-size: 1.05vw; max-width: 70vw; }
+  .stage.tela-04 .rodape { padding: 1.2vw 3.4vw; }
+  .stage.tela-04 .programe-se { font-size: 1.3vw; }
+
+  .duplas-04-wrap {
+    position: absolute; left: 2.4vw; right: 2.4vw; top: 21vh; bottom: 8vh; z-index: 5;
+    display: flex; gap: 1.2vw;
   }
-
-  .slide-icon {
-    position: absolute; right: 120px; top: 50%;
-    transform: translateY(-50%);
-    font-size: 280px; /* Ícone maior */
-    opacity: .05;
-    pointer-events: none; line-height: 1;
+  /* Coluna de Duplas */
+  .col-04 {
+    flex: 1; display: flex; flex-direction: column; gap: 0.35vw; justify-content: center;
+    background: rgba(0,0,0,0.18); border: 1px solid rgba(255,255,255,0.14); border-radius: 1vw; padding: 1vw 0.9vw; backdrop-filter: blur(5px);
   }
-
-  /* ── COUNTDOWN BLOCK ── */
-  .countdown-block {
-    margin-top: 50px;
-    display: inline-flex; align-items: stretch; gap: 0;
-    border-radius: 12px; overflow: hidden;
-    box-shadow: 0 10px 30px rgba(26, 119, 51, 0.08);
+  .col-titulo-04 {
+    color: var(--verde-brilho); font-size: 1.25vw; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em;
+    border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.4vw; margin-bottom: 0.3vw; text-align: center;
   }
-
-  .count-number {
-    background: rgba(26, 119, 51, 0.05);
-    border: 1px solid rgba(26, 119, 51, 0.15);
-    padding: 20px 60px;
-    font-size: 130px; /* Número gigante */
-    font-weight: 700;
-    color: var(--green);
-    line-height: 1;
-    min-width: 260px;
-    text-align: center;
-    display: flex; align-items: center; justify-content: center;
+  /* Mini Cartão Compacto de Dupla */
+  .mini-cartao {
+    display: flex; flex-direction: column; gap: 0.1vw; background: rgba(255,255,255,0.05);
+    border-left: 0.35vw solid var(--verde-medio); border-radius: 0.4vw; padding: 0.38vw 0.7vw;
   }
-
-  .count-label {
-    background: var(--green);
-    color: #fff;
-    padding: 20px 50px;
-    font-size: 36px; /* Texto maior */
-    font-weight: 700;
-    letter-spacing: .06em;
-    text-transform: uppercase;
-    line-height: 1;
-    display: flex; flex-direction: column; gap: 8px;
-    align-items: flex-start; justify-content: center;
-  }
-
-  .count-label span {
-    font-size: 18px; font-weight: 500; letter-spacing: .25em;
-    opacity: .85; text-transform: uppercase;
-  }
-
-  /* ── URGENCY BADGE ── */
-  .urgency-badge {
-    position: absolute; top: 80px; right: 120px;
-    background: #d32f2f;
-    color: #fff;
-    font-size: 28px; /* Maior */
-    font-weight: 700; letter-spacing: .15em; text-transform: uppercase;
-    padding: 18px 40px; border-radius: 10px;
-    animation: pulse-badge 2s ease-in-out infinite;
-    box-shadow: 0 4px 15px rgba(211, 47, 47, 0.3);
-  }
-
-  @keyframes pulse-badge {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.85; transform: scale(1.03); }
-  }
-
-  /* ── FOOTER TICKER ── */
-  .footer {
-    position: absolute;
-    bottom: 0; left: 0; right: 0;
-    height: 120px; /* Aumentado */
-    border-top: 1px solid rgba(26, 119, 51, 0.15);
-    background: #ffffff;
-    display: flex; align-items: center;
-    overflow: hidden; z-index: 10;
+  .mini-cartao span {
+    color: var(--branco); font-size: 1.4vw; font-weight: 700; line-height: 1.2;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   }
 
-  .ticker-label {
-    flex-shrink: 0; padding: 0 40px;
-    font-size: 18px; letter-spacing: .28em; text-transform: uppercase; /* Letra maior */
-    color: #ffffff; background: var(--green); font-weight: 600;
-    height: 100%; display: flex; align-items: center;
-  }
-
-  .ticker-track { flex: 1; overflow: hidden; height: 100%; display: flex; align-items: center; }
-  .ticker-inner {
-    display: flex; gap: 0; white-space: nowrap;
-    animation: ticker-scroll 45s linear infinite;
-  }
-
-  .ticker-item {
-    display: inline-flex; align-items: center; gap: 18px;
-    padding: 0 80px; font-size: 28px; /* Texto rotativo maior */
-    font-weight: 500; color: var(--text-dark);
-  }
-
-  .ticker-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); flex-shrink: 0; }
-
-  @keyframes ticker-scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
-
-  /* ── PROGRESS DOTS ── */
-  .progress-dots {
-    position: absolute; bottom: 140px; left: 50%;
-    transform: translateX(-50%);
-    display: flex; gap: 16px; z-index: 20;
-  }
-
-  .dot { width: 12px; height: 12px; border-radius: 50%; background: rgba(26, 119, 51, 0.25); transition: all .4s ease; }
-  .dot.active { background: var(--green); width: 40px; border-radius: 6px; }
-
-  /* ── PROGRESS BAR ── */
-  .progress-bar {
-    position: absolute; bottom: 120px; left: 0;
-    height: 4px; background: var(--green);
-    width: 0%; z-index: 15; transition: none;
-  }
-  .progress-bar.running { transition: width 8000ms linear; width: 100%; }
 </style>
 </head>
 <body>
 
-<div class="bg"></div>
-<div class="accent-bar"></div>
+<div class="slider">
 
-<header class="header">
-  <div class="logo-area">
-    <div class="logo-icon">
-      <img src="Ícone-da-Logo-Valgroup-Colorido.ico" height="75px" alt="" onerror="this.style.display='none'">
+  <!-- ==================== [TELA FÍSICA 1] DA ESQUERDA: DUPLAS 04/08 (ESTOQUE) ==================== -->
+  <!-- ESTA TELA FICA EXIBIDA POR 30 SEGUNDOS, POR ÚLTIMO NO CICLO, ANTES DE VOLTAR AO CENTRO -->
+  <div class="stage tela-04">
+    <div class="topo">
+      <div class="marca-topo">
+        <div class="eyebrow">Comunicado Interno</div>
+        <div class="titulo-principal">Logística SP10</div>
+      </div>
     </div>
-    <div>
-      <div class="logo-text">VALGROUP</div>
-      <div class="logo-sub">Informativo diário</div>
-    </div>
-  </div>
-  <div class="header-right">
-    <div id="clock">--:--:--</div>
-    <div id="date">--</div>
-  </div>
-</header>
 
-<div class="slides-wrapper">
-
-  <div class="slide active" data-index="0">
-    <div class="slide-icon">📦</div>
-    <div class="urgency-badge">⚠ ATENÇÃO</div>
-    <div class="slide-badge">
-      <div class="badge-line"></div>
-      <span class="badge-label">Inventário Geral</span>
+    <div class="info-fixo">
+      <div class="subtitulo">Definição de Duplas — 04/08 (Terça-feira)</div>
+      <div class="intro">Confira a escala de duplas designadas para o inventário no <b>Estoque lado esquerdo</b>.</div>
     </div>
-    <div class="slide-title">Faltam apenas<br><em>5 dias!</em></div>
-    <div class="slide-body">O Inventário Geral se aproxima. Garanta que todos os apontamentos e localizações estejam corretos no SAP.</div>
-    <div class="countdown-block">
-      <div class="count-number">5</div>
-      <div class="count-label">
-        <span>faltam</span>
-        DIAS
+
+    <div class="duplas-04-wrap">
+      
+      <!-- Coluna: Racks Alto -->
+      <div class="col-04">
+        <div class="col-titulo-04">Racks Alto</div>
+        
+        <div class="mini-cartao">
+          <span>Leonardo Lopes Moreira Jorge</span>
+          <span>Luiz Augusto Carvalho</span>
+        </div>
+        <div class="mini-cartao">
+          <span>Marcelo da Silva Nascimento</span>
+          <span>Marcos Paulo de C. M. Mascarenhas</span>
+        </div>
+        <div class="mini-cartao">
+          <span>Vinicius Lorran Carvalho de Almeida</span>
+          <span>Washington Raimundo da Conceição</span>
+        </div>
+      </div>
+
+      <!-- Coluna: Rack Piso -->
+      <div class="col-04">
+        <div class="col-titulo-04">Rack Piso</div>
+        
+        <div class="mini-cartao">
+          <span>Altieris Moreira da Silva</span>
+          <span>Amanda de Siqueira Batista de Souza</span>
+        </div>
+        <div class="mini-cartao">
+          <span>Anderson Fernando Silva</span>
+          <span>Tamirys Jessica Sampaio Antunes Goncalves</span>
+        </div>
+        <div class="mini-cartao">
+          <span>Lucas de Paula Carvalho</span>
+          <span>Luiz Aurelio da Silva</span>
+        </div>
+        <div class="mini-cartao">
+          <span>Silvaney Roberto da Silva</span>
+          <span>Melissa Nunes de Abreu</span>
+        </div>
+        <div class="mini-cartao">
+          <span>Isaias Fabiano da Silva</span>
+          <span>Radames Lazaro de Carvalho Correa Junior</span>
+        </div>
+        <div class="mini-cartao">
+          <span>Marcus Vinicius dos Santos</span>
+          <span>Pablo Henrique Campos de Souza Pereira</span>
+        </div>
+      </div>
+
+      <!-- Coluna: Blocado -->
+      <div class="col-04">
+        <div class="col-titulo-04">Blocado</div>
+        
+        <div class="mini-cartao">
+          <span>Gilberto Martiniano</span>
+          <span>Maria Julia Marins Ferraz dos Santos</span>
+        </div>
+        <div class="mini-cartao">
+          <span>Henrique Mafra Hummel Mendonça</span>
+          <span>Murilo da Costa Silva</span>
+        </div>
+        <div class="mini-cartao">
+          <span>Pedro Chaignon de Assis Ribeiro Junior</span>
+          <span>Anelise Augusta Cordeiro da Silva</span>
+        </div>
+        <div class="mini-cartao">
+          <span>Robson Figueiredo Nunes</span>
+          <span>Paulo Francisco Quintao Medeiros</span>
+        </div>
+        <div class="mini-cartao">
+          <span>Luiz Claudio Bento da Silva</span>
+          <span>Najara Rafaela Maciel Hummel</span>
+        </div>
+        <div class="mini-cartao">
+          <span>Nicholas Gabriel de Moura</span>
+          <span>Carlos Eduardo de Sousa</span>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="rodape">
+      <div class="programe-se">Contagem Estoque Lado Esquerdo</div>
+      <div class="live-badge">
+        <div class="live-dot"></div>
+        <div class="live-texto">ATENÇÃO</div>
       </div>
     </div>
   </div>
 
-  <div class="slide" data-index="1">
-    <div class="slide-icon">🔧</div>
-    <div class="slide-badge">
-      <div class="badge-line"></div>
-      <span class="badge-label">Inventário Oficial · MRO</span>
+  <!-- ==================== [TELA FÍSICA 2] CENTRAL: CRONOGRAMA ==================== -->
+  <!-- PRIMEIRA TELA EXIBIDA NO CICLO E ÚLTIMA ANTES DE REINICIAR -->
+  <div class="stage">
+    <div class="topo">
+      <div class="marca-topo">
+        <div class="eyebrow">Comunicado Interno</div>
+        <div class="titulo-principal">Logística SP10</div>
+      </div>
     </div>
-    <div class="slide-title">Faltam apenas<br><em>10 dias!</em></div>
-    <div class="slide-body">O Inventário Oficial de MRO está chegando. Alinhe sua equipe e verifique as posições físicas e sistêmicas.</div>
-    <div class="countdown-block">
-      <div class="count-number">10</div>
-      <div class="count-label">
-        <span>faltam</span>
-        DIAS · MRO
+
+    <div class="info-fixo">
+      <div class="subtitulo">Informativo de Inventário Lorena — SP10 "P716"</div>
+      <div class="intro">O inventário do depósito SP10 seguirá o cronograma abaixo. Confira as datas e horários:</div>
+    </div>
+
+    <div class="faixa-wrap">
+      <div class="faixa-track">
+        <div class="cartao">
+          <div class="cartao-hora"><span class="data">03/08</span><span class="hora">07:30h</span></div>
+          <div class="cartao-texto">
+            <div class="cartao-label">Etapa 1</div>
+            <div class="cartao-desc">Inventário de <b>Produção e Insumos</b>, com início às <b>07:30h</b>.</div>
+          </div>
+        </div>
+        <div class="cartao">
+          <div class="cartao-hora"><span class="data">04/08</span><span class="hora">07:30h</span></div>
+          <div class="cartao-texto">
+            <div class="cartao-label">Etapa 2</div>
+            <div class="cartao-desc">Contagem <b>100% do estoque</b> — 1ª parte, com início às <b>07:30h</b>.</div>
+          </div>
+        </div>
+        <div class="cartao">
+          <div class="cartao-hora"><span class="data">05/08</span><span class="hora">07:30h</span></div>
+          <div class="cartao-texto">
+            <div class="cartao-label">Etapa 3</div>
+            <div class="cartao-desc">Contagem <b>100% do estoque</b> — 2ª parte, com início às <b>07:30h</b>.</div>
+          </div>
+        </div>
+        <div class="cartao">
+          <div class="cartao-hora"><span class="data">100%</span><span class="hora">coletor</span></div>
+          <div class="cartao-texto">
+            <div class="cartao-label">Padrão de auditoria</div>
+            <div class="cartao-desc">Todas as contagens serão realizadas <b>100% no coletor de dados</b>.</div>
+          </div>
+        </div>
+        
+        <!-- Duplicado para loop contínuo da faixa rolante -->
+        <div class="cartao">
+          <div class="cartao-hora"><span class="data">03/08</span><span class="hora">07:30h</span></div>
+          <div class="cartao-texto">
+            <div class="cartao-label">Etapa 1</div>
+            <div class="cartao-desc">Inventário de <b>Produção e Insumos</b>, com início às <b>07:30h</b>.</div>
+          </div>
+        </div>
+        <div class="cartao">
+          <div class="cartao-hora"><span class="data">04/08</span><span class="hora">07:30h</span></div>
+          <div class="cartao-texto">
+            <div class="cartao-label">Etapa 2</div>
+            <div class="cartao-desc">Contagem <b>100% do estoque</b> — 1ª parte, com início às <b>07:30h</b>.</div>
+          </div>
+        </div>
+        <div class="cartao">
+          <div class="cartao-hora"><span class="data">05/08</span><span class="hora">07:30h</span></div>
+          <div class="cartao-texto">
+            <div class="cartao-label">Etapa 3</div>
+            <div class="cartao-desc">Contagem <b>100% do estoque</b> — 2ª parte, com início às <b>07:30h</b>.</div>
+          </div>
+        </div>
+        <div class="cartao">
+          <div class="cartao-hora"><span class="data">100%</span><span class="hora">coletor</span></div>
+          <div class="cartao-texto">
+            <div class="cartao-label">Padrão de auditoria</div>
+            <div class="cartao-desc">Todas as contagens serão realizadas <b>100% no coletor de dados</b>.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="rodape">
+      <div class="programe-se">Programe-se!!</div>
+      <div class="live-badge">
+        <div class="live-dot"></div>
+        <div class="live-texto">AVISO</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== [TELA FÍSICA 3] DA DIREITA: DUPLAS 03/08 (PRODUÇÃO) ==================== -->
+  <!-- SEGUNDA TELA EXIBIDA NO CICLO, LOGO APÓS SAIR DO CENTRO -->
+  <div class="stage">
+    <div class="topo">
+      <div class="marca-topo">
+        <div class="eyebrow">Comunicado Interno</div>
+        <div class="titulo-principal">Logística SP10</div>
+      </div>
+    </div>
+
+    <div class="info-fixo">
+      <div class="subtitulo">Definição de Duplas — 03/08 (Segunda-feira)</div>
+      <div class="intro">Confira a escala de duplas designadas para o inventário de <b>Produção 100% COLETOR</b>.</div>
+    </div>
+
+    <div class="duplas-wrap">
+      
+      <div class="cartao-dupla">
+        <div class="dupla-titulo">Equipe 1</div>
+        <div class="colaborador">
+          <div class="icon-user">C</div>
+          <span>Clara</span>
+        </div>
+        <div class="colaborador">
+          <div class="icon-user">L</div>
+          <span>Leonardo Lopes Moreira Jorge</span>
+        </div>
+      </div>
+
+      <div class="cartao-dupla">
+        <div class="dupla-titulo">Equipe 2</div>
+        <div class="colaborador">
+          <div class="icon-user">A</div>
+          <span>Alicia</span>
+        </div>
+        <div class="colaborador">
+          <div class="icon-user">M</div>
+          <span>Murilo da Costa Silva</span>
+        </div>
+      </div>
+
+      <div class="cartao-dupla">
+        <div class="dupla-titulo">Equipe 3</div>
+        <div class="colaborador">
+          <div class="icon-user">E</div>
+          <span>Edson Santos Muller</span>
+        </div>
+        <div class="colaborador">
+          <div class="icon-user">V</div>
+          <span>Vinicius Lorran</span>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="rodape">
+      <div class="programe-se">Contagem Produção, Qualidade e Estoque PR</div>
+      <div class="live-badge">
+        <div class="live-dot"></div>
+        <div class="live-texto">ATENÇÃO</div>
       </div>
     </div>
   </div>
 
 </div>
 
-<div class="progress-dots">
-  <div class="dot active"></div>
-  <div class="dot"></div>
-</div>
-
-<div class="progress-bar" id="progressBar"></div>
-
-<footer class="footer">
-  <div class="ticker-label">Informativos</div>
-  <div class="ticker-track">
-    <div class="ticker-inner" id="tickerInner"></div>
-  </div>
-</footer>
-
-<script>
-  // ── CLOCK ──
-  function updateClock() {
-    const now = new Date();
-    document.getElementById('clock').textContent =
-      now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-    document.getElementById('date').textContent =
-      now.toLocaleDateString('pt-BR', { weekday: 'long', day: '2-digit', month: 'long', year: 'numeric' });
-  }
-  updateClock();
-  setInterval(updateClock, 1000);
-
-  // ── TICKER ──
-  const tickerMessages = [
-    'INVENTÁRIO GERAL: faltam 5 dias — garanta seus apontamentos no SAP',
-    'INVENTÁRIO MRO: faltam 10 dias para o Inventário Oficial de MRO',
-    'Divergências físicas/sistêmicas? Acione imediatamente o time de Estoque',
-    'Refeitório: cardápio desta semana disponível no App Tá na mão',
-    'RH: prazo para acerto do ponto encerra dia 08/04',
-    'Segurança: use sempre o crachá de identificação nas dependências da empresa',
-    'Utilizar sempre os EPIs conforme a NR6',
-    'Próximo evento: Semana de Saúde e Bem-estar — 22 a 26 de Abril'
-  ];
-
-  const inner = document.getElementById('tickerInner');
-  [...tickerMessages, ...tickerMessages].forEach(msg => {
-    const item = document.createElement('span');
-    item.className = 'ticker-item';
-    item.innerHTML = `<span class="ticker-dot"></span>${msg}`;
-    inner.appendChild(item);
-  });
-
-  // ── SLIDES ──
-  const slides = document.querySelectorAll('.slide');
-  const dots   = document.querySelectorAll('.dot');
-  const bar    = document.getElementById('progressBar');
-  const DURATION = 8000;
-  let current = 0;
-  let timer;
-
-  function goTo(index) {
-    slides[current].classList.add('leaving');
-    dots[current].classList.remove('active');
-    setTimeout(() => {
-      slides[current].classList.remove('active', 'leaving');
-      current = index;
-      slides[current].classList.add('active');
-      dots[current].classList.add('active');
-    }, 700);
-    bar.classList.remove('running');
-    bar.style.transition = 'none';
-    bar.style.width = '0%';
-    requestAnimationFrame(() => requestAnimationFrame(() => {
-      bar.style.transition = `width ${DURATION}ms linear`;
-      bar.classList.add('running');
-    }));
-  }
-
-  function next() { goTo((current + 1) % slides.length); }
-  function startAuto() { clearInterval(timer); timer = setInterval(next, DURATION); }
-
-  bar.style.transition = `width ${DURATION}ms linear`;
-  bar.classList.add('running');
-  startAuto();
-</script>
 </body>
 </html>
