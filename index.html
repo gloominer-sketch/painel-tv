@@ -195,6 +195,68 @@
     opacity: 0.8;
   }
 
+  /* ===================== KPI CARDS DE ESTOQUE ===================== */
+  .kpi-painel {
+    display: flex;
+    gap: 2vw;
+    margin-top: 3vw;
+    width: 85vw;
+    justify-content: center;
+  }
+
+  .kpi-card {
+    display: flex;
+    align-items: center;
+    background: var(--branco);
+    padding: 1.5vw 2vw;
+    border-radius: 1vw;
+    border: 1px solid rgba(32, 42, 68, 0.08);
+    box-shadow: 0 10px 30px rgba(32, 42, 68, 0.05);
+    flex: 1;
+    gap: 1.5vw;
+  }
+
+  .kpi-card.destaque {
+    background: var(--valgroup-azul);
+    color: var(--branco);
+  }
+
+  .kpi-icone {
+    font-size: 2.5vw;
+    background: var(--fundo-cinza);
+    padding: 1vw;
+    border-radius: 0.8vw;
+  }
+
+  .kpi-card.destaque .kpi-icone { background: rgba(255,255,255,0.1); }
+  .kpi-icone.verde { background: rgba(26, 121, 54, 0.1); }
+  .kpi-icone.azul { background: rgba(32, 42, 68, 0.1); }
+  .kpi-icone.alerta { background: rgba(220, 53, 69, 0.1); }
+
+  .kpi-info {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .kpi-titulo {
+    font-size: 1vw;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--texto-suave);
+  }
+
+  .kpi-card.destaque .kpi-titulo { color: rgba(255,255,255,0.8); }
+
+  .kpi-valor {
+    font-size: 2.5vw;
+    font-weight: 900;
+    color: var(--valgroup-azul);
+    line-height: 1.2;
+  }
+
+  .kpi-card.destaque .kpi-valor { color: var(--branco); }
+
   /* ===================== RODAPÉ ===================== */
   .rodape { 
     position: absolute; 
@@ -289,6 +351,47 @@
         </div>
       </div>
 
+      <!-- PAINEL DE INDICADORES DE ESTOQUE -->
+      <div class="kpi-painel">
+        
+        <!-- Card 1: Total -->
+        <div class="kpi-card destaque">
+          <div class="kpi-icone">📦</div>
+          <div class="kpi-info">
+            <div class="kpi-titulo">Total Estoque</div>
+            <div class="kpi-valor" id="val-total">--</div>
+          </div>
+        </div>
+
+        <!-- Card 2: Livre -->
+        <div class="kpi-card">
+          <div class="kpi-icone verde">✅</div>
+          <div class="kpi-info">
+            <div class="kpi-titulo">Livre</div>
+            <div class="kpi-valor" id="val-livre">--</div>
+          </div>
+        </div>
+
+        <!-- Card 3: Qualidade -->
+        <div class="kpi-card">
+          <div class="kpi-icone azul">🔍</div>
+          <div class="kpi-info">
+            <div class="kpi-titulo">Qualidade</div>
+            <div class="kpi-valor" id="val-qualidade">--</div>
+          </div>
+        </div>
+
+        <!-- Card 4: Bloqueado -->
+        <div class="kpi-card">
+          <div class="kpi-icone alerta">⚠️</div>
+          <div class="kpi-info">
+            <div class="kpi-titulo">Bloqueado</div>
+            <div class="kpi-valor" id="val-bloqueado">--</div>
+          </div>
+        </div>
+
+      </div>
+
       <!-- Rodapé -->
       <div class="rodape">
         <div class="programe-se">Mantenha os controles de estoque </div>
@@ -328,6 +431,34 @@
       document.getElementById("minutos").innerText = formatar(minutos);
       document.getElementById("segundos").innerText = formatar(segundos);
     }, 1000);
+
+    // Função para buscar os dados de estoque e formatar os números
+    function carregarIndicadoresEstoque() {
+      fetch('dados.json')
+        .then(response => {
+          if (!response.ok) throw new Error("JSON não encontrado ainda.");
+          return response.json();
+        })
+        .then(dados => {
+          // Pega a primeira linha da planilha Excel
+          const estoque = dados[0];
+
+          // Função rápida para formatar número (ex: 15000 -> 15.000)
+          const formataNum = (num) => Number(num).toLocaleString('pt-BR');
+
+          // Injeta os valores nas divs correspondentes
+          document.getElementById('val-total').innerText = formataNum(estoque['Total estoque']);
+          document.getElementById('val-livre').innerText = formataNum(estoque['livre']);
+          document.getElementById('val-qualidade').innerText = formataNum(estoque['qualidade']);
+          document.getElementById('val-bloqueado').innerText = formataNum(estoque['bloqueado']);
+        })
+        .catch(error => {
+          console.log("Aguardando dados do Python...", error);
+        });
+    }
+
+    // Executa a busca assim que a tela liga
+    carregarIndicadoresEstoque();
   </script>
 
 </body>
