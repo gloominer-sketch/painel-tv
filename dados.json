@@ -1,8 +1,8 @@
 [
-  {
-    "Total estoque": 99999,
-    "livre": 88888,
-    "bloqueado": 5555,
-    "qualidade": 1111
-  }
+    {
+        "Total estoque": 10000,
+        "Livre": 8000,
+        "Bloqueado": 1000,
+        "Qualidade": 1000
+    }
 ]
