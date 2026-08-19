@@ -1,0 +1,39 @@
+name: Atualizar Dados da Logistica
+
+on:
+  schedule:
+    # Roda automaticamente a cada 1 hora (você pode alterar se quiser)
+    - cron: '0 * * * *'
+  workflow_dispatch: # Permite rodar manualmente a qualquer momento
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Copiar arquivos do repositorio
+        uses: actions/checkout@v3
+
+      - name: Configurar o Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Instalar bibliotecas
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Executar script de extracao
+        env:
+          MEU_CLIENT_ID: ${{ secrets.MEU_CLIENT_ID }}
+          MEU_CLIENT_SECRET: ${{ secrets.MEU_CLIENT_SECRET }}
+          MEU_TENANT_ID: ${{ secrets.MEU_TENANT_ID }}
+        run: |
+          python atualizar_dados.py
+
+      - name: Salvar novo dados.json no GitHub
+        run: |
+          git config --global user.name "Robo da Logistica"
+          git config --global user.email "robo@valgroup.com"
+          git add dados.json
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Atualizacao automatica de estoque" && git push)
