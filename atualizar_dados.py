@@ -9,7 +9,6 @@ client_id = os.getenv("MEU_CLIENT_ID")
 client_secret = os.getenv("MEU_CLIENT_SECRET")
 tenant_id = os.getenv("MEU_TENANT_ID")
 
-# O site_id que pescamos agora pouco
 site_id = "231de1cf-c260-40f1-8c16-9ea0400b82e0" 
 
 def obter_token():
@@ -28,17 +27,28 @@ def extrair_dados():
     token = obter_token()
     headers = {"Authorization": f"Bearer {token}"}
 
-    # Busca o arquivo Excel direto pelo caminho da pasta no SharePoint da Logística
-    # (Note que usamos o nome exato da sua biblioteca e pastas)
-    caminho_arquivo = "/sites/LOGISTICACORPORATIVO/Documentos Compartilhados/DasboardEstoque/Pasta.xlsx"
+    # 1. Descobre qual é o drive principal (biblioteca de documentos) do site da Logística
+    url_drives = f"https://graph.microsoft.com/v1.0/sites/{site_id}/drives"
+    res_drives = requests.get(url_drives, headers=headers)
+    res_drives.raise_for_status()
     
-    # Rota da Graph API que localiza pelo caminho (evita dor de cabeça com drive_id)
-    url_drive = f"https://graph.microsoft.com/v1.0/sites/{site_id}/drive/root:{caminho_arquivo}"
-    res_drive = requests.get(url_drive, headers=headers)
-    res_drive.raise_for_status()
+    # Pega o ID da primeira biblioteca de documentos (Documentos Compartilhados)
+    drives = res_drives.json().get("value", [])
+    if not drives:
+        raise Exception("Nenhum drive encontrado neste site do SharePoint.")
     
-    # Pega o link de conteúdo direto do arquivo encontrado
-    download_url = res_drive.json().get("@microsoft.graph.downloadUrl")
+    drive_id = drives[0]["id"]
+
+    # 2. Busca o arquivo pelo caminho exato dentro da biblioteca de documentos
+    # Caminho relativo dentro do Documentos Compartilhados: DasboardEstoque/Pasta.xlsx
+    caminho_interno = "DasboardEstoque/Pasta.xlsx"
+    url_item = f"https://graph.microsoft.com/v1.0/drives/{drive_id}/root:/{caminho_interno}"
+    
+    res_item = requests.get(url_item, headers=headers)
+    res_item.raise_for_status()
+    
+    # Pega o link direto para download da planilha
+    download_url = res_item.json().get("@microsoft.graph.downloadUrl")
     
     response = requests.get(download_url)
     response.raise_for_status()
