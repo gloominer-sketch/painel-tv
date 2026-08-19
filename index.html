@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="refresh" content="36">
 <title>Comunicado Interno — Valgroup Logística</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap');
@@ -199,9 +198,10 @@
   .kpi-painel {
     display: flex;
     gap: 2vw;
-    margin-top: 3vw;
+    margin-top: 1vw;
     width: 85vw;
     justify-content: center;
+    z-index: 20;
   }
 
   .kpi-card {
@@ -262,7 +262,9 @@
     position: absolute; 
     left: 0; right: 0; bottom: 0; 
     display: flex; align-items: center; justify-content: space-between; 
-    padding: 3vw 4vw; 
+    padding: 1.5vw 4vw;
+    background: var(--branco);
+    z-index: 30;
   }
   
   .programe-se { 
@@ -406,7 +408,7 @@
 
   <!-- Script do Contador -->
   <script>
-    // Configurado para 21 de Setembro de 2026 às 07:30 da manhã (Horário de Brasília)
+    // === 1. O CONTADOR REGRESSIVO ===
     const dataAlvo = new Date('2026-09-21T07:30:00-03:00').getTime();
 
     const atualizarContador = setInterval(function() {
@@ -432,33 +434,33 @@
       document.getElementById("segundos").innerText = formatar(segundos);
     }, 1000);
 
-    // Função para buscar os dados de estoque e formatar os números
+    // === 2. A BUSCA DOS DADOS DE ESTOQUE ===
     function carregarIndicadoresEstoque() {
-      fetch('dados.json')
+      // O truque '?nocache=' força a TV a sempre baixar o dado mais novo
+      fetch('dados.json?nocache=' + new Date().getTime())
         .then(response => {
-          if (!response.ok) throw new Error("JSON não encontrado ainda.");
+          if (!response.ok) throw new Error("JSON não encontrado.");
           return response.json();
         })
         .then(dados => {
-          // Pega a primeira linha da planilha Excel
           const estoque = dados[0];
+          // Se vier vazio, coloca 0. E já formata com ponto.
+          const formataNum = (num) => Number(num || 0).toLocaleString('pt-BR');
 
-          // Função rápida para formatar número (ex: 15000 -> 15.000)
-          const formataNum = (num) => Number(num).toLocaleString('pt-BR');
-
-          // Injeta os valores nas divs correspondentes
           document.getElementById('val-total').innerText = formataNum(estoque['Total estoque']);
-          document.getElementById('val-livre').innerText = formataNum(estoque['livre']);
-          document.getElementById('val-qualidade').innerText = formataNum(estoque['qualidade']);
-          document.getElementById('val-bloqueado').innerText = formataNum(estoque['bloqueado']);
+          document.getElementById('val-livre').innerText = formataNum(estoque['Livre'] || estoque['livre']);
+          document.getElementById('val-qualidade').innerText = formataNum(estoque['Qualidade'] || estoque['qualidade']);
+          document.getElementById('val-bloqueado').innerText = formataNum(estoque['Bloqueado'] || estoque['bloqueado']);
         })
         .catch(error => {
-          console.log("Aguardando dados do Python...", error);
+          console.log("Aguardando dados...", error);
         });
     }
 
-    // Executa a busca assim que a tela liga
+    // Carrega a primeira vez assim que a tela abre
     carregarIndicadoresEstoque();
+    // Continua atualizando os números sozinho a cada 30 segundos (sem a tela piscar)
+    setInterval(carregarIndicadoresEstoque, 30000);
   </script>
 
 </body>
