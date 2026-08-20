@@ -27,12 +27,11 @@ def extrair_dados():
     token = obter_token()
     headers = {"Authorization": f"Bearer {token}"}
 
-    # 1. Descobre qual é o drive principal (biblioteca de documentos) do site da Logística
+    # 1. Descobre qual é o drive principal do site da Logística
     url_drives = f"https://graph.microsoft.com/v1.0/sites/{site_id}/drives"
     res_drives = requests.get(url_drives, headers=headers)
     res_drives.raise_for_status()
     
-    # Pega o ID da primeira biblioteca de documentos (Documentos Compartilhados)
     drives = res_drives.json().get("value", [])
     if not drives:
         raise Exception("Nenhum drive encontrado neste site do SharePoint.")
@@ -40,52 +39,46 @@ def extrair_dados():
     drive_id = drives[0]["id"]
 
     # =========================================================
-    # ARQUIVO 1: Pasta.xlsx (Dados de Estoque originais)
+    # ARQUIVO 1: Pasta.xlsx (Estoque)
     # =========================================================
     caminho_1 = "DasboardEstoque/Pasta.xlsx"
     url_item_1 = f"https://graph.microsoft.com/v1.0/drives/{drive_id}/root:/{caminho_1}"
-    
     res_item_1 = requests.get(url_item_1, headers=headers)
     res_item_1.raise_for_status()
     
-    download_url_1 = res_item_1.json().get("@microsoft.graph.downloadUrl")
-    
-    response_1 = requests.get(download_url_1)
+    response_1 = requests.get(res_item_1.json().get("@microsoft.graph.downloadUrl"))
     response_1.raise_for_status()
 
-    # Lê o Excel e salva como dados.json
     df_1 = pd.read_excel(BytesIO(response_1.content), engine='openpyxl')
+    # Força tudo a virar texto antes de virar JSON para não dar erro
+    df_1 = df_1.astype(str)
     dados_json_1 = df_1.to_dict(orient='records')
 
-    # Adicionado 'default=str' para garantir que qualquer data vire texto
     with open('dados.json', 'w', encoding='utf-8') as f:
-        json.dump(dados_json_1, f, ensure_ascii=False, indent=4, default=str)
+        json.dump(dados_json_1, f, ensure_ascii=False, indent=4)
         
-    print("✅ Arquivo 1 (Pasta.xlsx) processado com sucesso e salvo como dados.json")
+    print("✅ Arquivo 1 (Pasta.xlsx) salvo como dados.json")
 
     # =========================================================
-    # ARQUIVO 2: faturamento.xlsx (Novos dados de faturamento)
+    # ARQUIVO 2: faturamento.xlsx (Faturamento)
     # =========================================================
     caminho_2 = "DasboardEstoque/faturamento.xlsx"
     url_item_2 = f"https://graph.microsoft.com/v1.0/drives/{drive_id}/root:/{caminho_2}"
-    
     res_item_2 = requests.get(url_item_2, headers=headers)
     res_item_2.raise_for_status()
     
-    download_url_2 = res_item_2.json().get("@microsoft.graph.downloadUrl")
-    
-    response_2 = requests.get(download_url_2)
+    response_2 = requests.get(res_item_2.json().get("@microsoft.graph.downloadUrl"))
     response_2.raise_for_status()
 
-    # Lê o Excel com as colunas (faturamento geral, faturamento dia, mes, centro)
     df_2 = pd.read_excel(BytesIO(response_2.content), engine='openpyxl')
+    # Força tudo (inclusive a coluna Mês) a virar texto puro! (Resolve o erro do Timestamp)
+    df_2 = df_2.astype(str)
     dados_json_2 = df_2.to_dict(orient='records')
 
-    # Adicionado 'default=str' aqui também! Resolve o erro do Timestamp (datas).
     with open('dados_faturamento.json', 'w', encoding='utf-8') as f:
-        json.dump(dados_json_2, f, ensure_ascii=False, indent=4, default=str)
+        json.dump(dados_json_2, f, ensure_ascii=False, indent=4)
         
-    print("✅ Arquivo 2 (faturamento.xlsx) processado com sucesso e salvo como dados_faturamento.json")
+    print("✅ Arquivo 2 (faturamento.xlsx) salvo como dados_faturamento.json")
 
 if __name__ == "__main__":
     extrair_dados()
