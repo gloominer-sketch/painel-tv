@@ -57,8 +57,9 @@ def extrair_dados():
     df_1 = pd.read_excel(BytesIO(response_1.content), engine='openpyxl')
     dados_json_1 = df_1.to_dict(orient='records')
 
+    # Adicionado 'default=str' para garantir que qualquer data vire texto
     with open('dados.json', 'w', encoding='utf-8') as f:
-        json.dump(dados_json_1, f, ensure_ascii=False, indent=4)
+        json.dump(dados_json_1, f, ensure_ascii=False, indent=4, default=str)
         
     print("✅ Arquivo 1 (Pasta.xlsx) processado com sucesso e salvo como dados.json")
 
@@ -80,9 +81,9 @@ def extrair_dados():
     df_2 = pd.read_excel(BytesIO(response_2.content), engine='openpyxl')
     dados_json_2 = df_2.to_dict(orient='records')
 
-    # Salva como um SEGUNDO arquivo JSON
+    # Adicionado 'default=str' aqui também! Resolve o erro do Timestamp (datas).
     with open('dados_faturamento.json', 'w', encoding='utf-8') as f:
-        json.dump(dados_json_2, f, ensure_ascii=False, indent=4)
+        json.dump(dados_json_2, f, ensure_ascii=False, indent=4, default=str)
         
     print("✅ Arquivo 2 (faturamento.xlsx) processado com sucesso e salvo como dados_faturamento.json")
 
