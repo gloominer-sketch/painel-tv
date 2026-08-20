@@ -1,8 +1,8 @@
 [
     {
-        "Total estoque": 9970281,
-        "Livre": 8625937,
-        "Bloqueado": 1148429,
-        "Qualidade": 195914
+        "Total estoque": "9970281",
+        "Livre": "8625937",
+        "Bloqueado": "1148429",
+        "Qualidade": "195914"
     }
 ]
