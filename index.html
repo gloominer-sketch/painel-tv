@@ -455,7 +455,7 @@
           const diferenca = metaFinal - geral;
 
           document.getElementById('fat-meta').innerText = dinheiroCompacto(metaFinal);
-          document.getElementById('meta-topo-valor').innerText = 'R$ ' + dinheiroCompacto(metaFinal);
+          document.getElementById('meta-topo-valor').innerText = '' + dinheiroCompacto(metaFinal);
           document.getElementById('fat-pct').innerText = pct.toLocaleString('pt-BR', { maximumFractionDigits: 1 });
           document.getElementById('fat-falta').innerText = dinheiro(diferenca);
         })
