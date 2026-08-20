@@ -31,9 +31,13 @@ jobs:
         run: |
           python atualizar_dados.py
 
-      - name: Salvar novo dados.json no GitHub
+      - name: Salvar novo arquivo de faturamento no GitHub
         run: |
           git config --global user.name "Robo da Logistica"
           git config --global user.email "robo@valgroup.com"
-          git add dados.json
-          git diff --quiet && git diff --staged --quiet || (git commit -m "Atualizacao automatica de estoque" && git push)
+          
+          # Adiciona o arquivo com o nome exato mostrado na imagem
+          git add dados_faturamento.json
+          
+          # Verifica se houve mudanças e, se sim, faz o commit e o push
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Atualizacao automatica de faturamento" && git push)
