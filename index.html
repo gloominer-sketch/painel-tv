@@ -333,7 +333,7 @@
           <div class="meta-rodape">
             <div class="meta-pct-big"><span id="fat-pct">--</span><i>% ATINGIDO</i></div>
             <div class="meta-falta">
-              <div class="meta-falta-label">FATURAMENTO - META</div>
+              <div class="meta-falta-label">FALTA PARA A META</div>
               <div class="meta-falta-valor" id="falta-box"><span class="prefixo-moeda">R$</span><span id="fat-falta">--</span></div>
             </div>
           </div>
@@ -394,6 +394,20 @@
     };
     const milhar = (v) => num(v).toLocaleString('pt-BR');
     const dinheiro = (v) => num(v).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    const dinheiroCompacto = (v) => {
+      const valor = num(v);
+      const absoluto = Math.abs(valor);
+      if (absoluto >= 1000000000) {
+        return (valor / 1000000000).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' B';
+      }
+      if (absoluto >= 1000000) {
+        return (valor / 1000000).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' M';
+      }
+      if (absoluto >= 1000) {
+        return (valor / 1000).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' mil';
+      }
+      return dinheiro(valor);
+    };
     const pega = (obj, chaves) => {
       for (const k of chaves) {
         for (const real in obj) {
@@ -455,10 +469,10 @@
           // Conta direta: faturamento geral comparado com a meta geral.
           const metaFinal = meta;
           const pct = metaFinal > 0 ? (geral / metaFinal) * 100 : 0;
-          const diferenca = geral - metaFinal;
+          const diferenca = metaFinal - geral;
 
-          document.getElementById('fat-meta').innerText = dinheiro(metaFinal);
-          document.getElementById('meta-topo-valor').innerText = 'R$ ' + dinheiro(metaFinal);
+          document.getElementById('fat-meta').innerText = dinheiroCompacto(metaFinal);
+          document.getElementById('meta-topo-valor').innerText = 'R$ ' + dinheiroCompacto(metaFinal);
           document.getElementById('fat-pct').innerText = pct.toLocaleString('pt-BR', { maximumFractionDigits: 1 });
           document.getElementById('fat-falta').innerText = dinheiro(diferenca);
         })
