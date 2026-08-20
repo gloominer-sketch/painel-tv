@@ -166,23 +166,16 @@
 
   .meta-pct { color: var(--valgroup-verde); font-size: 1vw; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; margin-top: 0.9vw; opacity: 0.85; }
 
-  /* ---- BARRA DE META ---- */
   .meta-wrap { width: 100%; margin-top: 2.8vw; }
   .meta-topo { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 0.9vw; }
   .meta-txt { color: var(--valgroup-azul); font-size: 1.05vw; font-weight: 700; text-transform: uppercase; letter-spacing: 0.2em; opacity: 0.55; display: flex; align-items: center; gap: 0.6vw; }
   .meta-txt b { color: var(--valgroup-azul); font-weight: 900; opacity: 1; letter-spacing: 0; font-size: 1.25vw; }
-  .meta-barra { position: relative; width: 100%; height: 1.5vw; border-radius: 100px; background: rgba(32,42,68,0.08); overflow: hidden; }
-  .meta-fill { position: absolute; top:0; bottom:0; left:0; width: 0%; border-radius: 100px;
-    background: linear-gradient(90deg, var(--valgroup-verde), #27a34a);
-    transition: width 1.6s cubic-bezier(0.22,1,0.36,1); }
-  .meta-fill::after { content: ''; position: absolute; right: 0; top: 0; bottom: 0; width: 0.35vw; background: rgba(255,255,255,0.55); }
   .meta-rodape { display: flex; justify-content: space-between; align-items: flex-end; margin-top: 1vw; }
   .meta-pct-big { color: var(--valgroup-verde); font-size: 2.2vw; font-weight: 900; line-height: 1; font-variant-numeric: tabular-nums; }
   .meta-pct-big i { font-style: normal; font-size: 1.05vw; font-weight: 800; letter-spacing: 0.12em; }
   .meta-falta { text-align: right; }
   .meta-falta-label { color: var(--valgroup-azul); font-size: 0.95vw; font-weight: 700; text-transform: uppercase; letter-spacing: 0.2em; opacity: 0.5; margin-bottom: 0.4vw; }
   .meta-falta-valor { color: var(--valgroup-azul); font-size: 2.2vw; font-weight: 900; line-height: 1; font-variant-numeric: tabular-nums; display: flex; align-items: baseline; justify-content: flex-end; gap: 0.4vw; }
-  .meta-batida { color: var(--valgroup-verde); }
 
   /* icone discreto */
   .ico { width: 1.15vw; height: 1.15vw; stroke: var(--valgroup-verde); stroke-width: 2.4; fill: none; stroke-linecap: round; stroke-linejoin: round; opacity: 0.9; flex: none; }
@@ -337,11 +330,10 @@
             </div>
             <div class="meta-txt">Meta&nbsp;<b id="meta-topo-valor">R$ --</b></div>
           </div>
-          <div class="meta-barra"><div class="meta-fill" id="meta-fill"></div></div>
           <div class="meta-rodape">
             <div class="meta-pct-big"><span id="fat-pct">--</span><i>% ATINGIDO</i></div>
             <div class="meta-falta">
-              <div class="meta-falta-label" id="falta-label">Falta para a meta</div>
+              <div class="meta-falta-label">FATURAMENTO - META</div>
               <div class="meta-falta-valor" id="falta-box"><span class="prefixo-moeda">R$</span><span id="fat-falta">--</span></div>
             </div>
           </div>
@@ -425,9 +417,6 @@
         .catch(err => console.log("Aguardando dados de estoque...", err));
     }
 
-    // ===== META DO MES (usada quando a planilha nao trouxer o valor) =====
-    const META_MES = 5000000;   // <<< meta fixa: mude aqui se precisar
-
     // ===== 3. FATURAMENTO =====
     function carregarFaturamento() {
       fetch('dados_faturamento.json?nocache=' + Date.now())
@@ -463,27 +452,15 @@
               hoje.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' });
           }
 
-          // Usa a meta geral da planilha; a constante fica apenas como fallback.
-          const metaFinal = meta || META_MES;
-          const pct   = metaFinal > 0 ? geral / metaFinal * 100 : 0;
-          const falta = metaFinal - geral;
+          // Conta direta: faturamento geral comparado com a meta geral.
+          const metaFinal = meta;
+          const pct = metaFinal > 0 ? (geral / metaFinal) * 100 : 0;
+          const diferenca = geral - metaFinal;
 
           document.getElementById('fat-meta').innerText = dinheiro(metaFinal);
           document.getElementById('meta-topo-valor').innerText = 'R$ ' + dinheiro(metaFinal);
           document.getElementById('fat-pct').innerText = pct.toLocaleString('pt-BR', { maximumFractionDigits: 1 });
-          document.getElementById('meta-fill').style.width = Math.max(0, Math.min(pct, 100)) + '%';
-
-          const lbl = document.getElementById('falta-label');
-          const box = document.getElementById('falta-box');
-          if (falta > 0) {
-            lbl.innerText = 'Falta para a meta';
-            box.classList.remove('meta-batida');
-            document.getElementById('fat-falta').innerText = dinheiro(falta);
-          } else {
-            lbl.innerText = 'Meta superada em';
-            box.classList.add('meta-batida');
-            document.getElementById('fat-falta').innerText = dinheiro(Math.abs(falta));
-          }
+          document.getElementById('fat-falta').innerText = dinheiro(diferenca);
         })
         .catch(err => console.log("Aguardando dados de faturamento...", err));
     }
