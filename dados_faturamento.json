@@ -1,9 +1,9 @@
 [
-  {
-    "faturamento geral": 3183851.614,
-    "centro": "P716",
-    "faturamento do dia": 63458.54,
-    "meta": 5000000.0,
-    "mes": "August/2026"
-  }
+    {
+        "faturamento geral": "3183851.61399999",
+        "centro": "P716",
+        "faturamento do dia": "63458.54",
+        "meta": "nan",
+        "mes": "2026-08-01"
+    }
 ]
