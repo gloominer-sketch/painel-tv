@@ -218,59 +218,101 @@
     opacity: 0.8;
   }
 
-  /* ===================== LISTA DE ESTOQUE (SOMENTE TEXTO + ICONE) ===================== */
-  .estoque-lista {
+  /* ===================== VOLUME DE ESTOQUE (TIPOGRAFICO) ===================== */
+  .estoque-bloco {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    gap: 1.4vw;
+    align-items: center;
+    width: 78vw;
     z-index: 20;
     margin-top: 2vw;
   }
 
-  .estoque-linha {
-    display: flex;
-    align-items: center;
-    gap: 1.6vw;
-    animation-duration: 40s;
-    animation-timing-function: cubic-bezier(0.77, 0, 0.17, 1);
-    animation-iteration-count: infinite;
-  }
-
-  .estoque-icone { font-size: 3.4vw; line-height: 1; flex-shrink: 0; }
-
-  .estoque-texto { display: flex; flex-direction: column; }
-
   .estoque-label {
     color: var(--valgroup-azul);
-    font-size: 1.4vw;
+    font-size: 1.2vw;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.25em;
-    opacity: 0.55;
+    letter-spacing: 0.3em;
+    opacity: 0.5;
     line-height: 1;
-    margin-bottom: 0.5vw;
+    margin-bottom: 0.8vw;
   }
 
   .estoque-valor {
     color: var(--valgroup-azul);
-    font-size: 5.5vw;
     font-weight: 900;
     text-transform: uppercase;
     letter-spacing: -0.02em;
     line-height: 1;
     font-variant-numeric: tabular-nums;
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 0.5vw;
   }
 
-  .estoque-lista .estoque-linha:nth-child(1) { animation-name: nascerLinha1; }
-  .estoque-lista .estoque-linha:nth-child(2) { animation-name: nascerLinha2; }
-  .estoque-lista .estoque-linha:nth-child(3) { animation-name: nascerLinha3; }
-  .estoque-lista .estoque-linha:nth-child(4) { animation-name: nascerLinha4; }
+  .estoque-unidade {
+    color: var(--valgroup-verde);
+    font-weight: 800;
+    text-transform: lowercase;
+    letter-spacing: 0.05em;
+  }
 
-  @keyframes nascerLinha1 { 0%, 57% { opacity: 0; transform: translateY(1.5vw); } 61%, 100% { opacity: 1; transform: translateY(0); } }
-  @keyframes nascerLinha2 { 0%, 59% { opacity: 0; transform: translateY(1.5vw); } 63%, 100% { opacity: 1; transform: translateY(0); } }
-  @keyframes nascerLinha3 { 0%, 61% { opacity: 0; transform: translateY(1.5vw); } 65%, 100% { opacity: 1; transform: translateY(0); } }
-  @keyframes nascerLinha4 { 0%, 63% { opacity: 0; transform: translateY(1.5vw); } 67%, 100% { opacity: 1; transform: translateY(0); } }
+  /* --- Destaque principal --- */
+  .estoque-hero { text-align: center; }
+  .estoque-hero .estoque-valor { font-size: 9vw; }
+  .estoque-hero .estoque-unidade { font-size: 2.6vw; }
+
+  .estoque-regua {
+    width: 100%;
+    height: 1px;
+    background: rgba(32, 42, 68, 0.12);
+    margin: 2.6vw 0 2.2vw;
+  }
+
+  /* --- Linha secundaria em 3 colunas --- */
+  .estoque-grid {
+    display: flex;
+    width: 100%;
+  }
+
+  .estoque-col {
+    flex: 1;
+    text-align: center;
+    position: relative;
+  }
+
+  .estoque-col:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 8%;
+    height: 84%;
+    width: 1px;
+    background: rgba(32, 42, 68, 0.12);
+  }
+
+  .estoque-col .estoque-valor { font-size: 4.4vw; }
+  .estoque-col .estoque-unidade { font-size: 1.5vw; }
+
+  /* Nascimento em sequencia */
+  .estoque-anim {
+    animation-duration: 40s;
+    animation-timing-function: cubic-bezier(0.77, 0, 0.17, 1);
+    animation-iteration-count: infinite;
+  }
+  .estoque-hero { animation-name: nascer1; }
+  .estoque-regua { animation-name: nascerRegua; }
+  .estoque-col:nth-child(1) { animation-name: nascer2; }
+  .estoque-col:nth-child(2) { animation-name: nascer3; }
+  .estoque-col:nth-child(3) { animation-name: nascer4; }
+
+  @keyframes nascer1 { 0%, 57% { opacity: 0; transform: translateY(1.5vw); } 61%, 100% { opacity: 1; transform: translateY(0); } }
+  @keyframes nascerRegua { 0%, 59% { opacity: 0; transform: scaleX(0.2); } 63%, 100% { opacity: 1; transform: scaleX(1); } }
+  @keyframes nascer2 { 0%, 61% { opacity: 0; transform: translateY(1.5vw); } 65%, 100% { opacity: 1; transform: translateY(0); } }
+  @keyframes nascer3 { 0%, 63% { opacity: 0; transform: translateY(1.5vw); } 67%, 100% { opacity: 1; transform: translateY(0); } }
+  @keyframes nascer4 { 0%, 65% { opacity: 0; transform: translateY(1.5vw); } 69%, 100% { opacity: 1; transform: translateY(0); } }
 
   /* ===================== RODAPÉ ===================== */
   .rodape { 
@@ -375,41 +417,31 @@
     <div class="cena-estoque">
 
       <div class="topo">
-        <div class="eyebrow">Volume Total de Estoque Hoje</div>
+        <div class="eyebrow">Volume de Estoque Hoje &middot; <span id="data-hoje">--/--/----</span></div>
         <div class="titulo-principal">Logística SP10</div>
       </div>
 
-      <div class="estoque-lista">
+      <div class="estoque-bloco">
 
-        <div class="estoque-linha">
-          <div class="estoque-icone">📦</div>
-          <div class="estoque-texto">
-            <div class="estoque-label">Total Estoque</div>
-            <div class="estoque-valor" id="val-total">--</div>
-          </div>
+        <div class="estoque-hero estoque-anim">
+          <div class="estoque-label">Total de Estoque</div>
+          <div class="estoque-valor"><span id="val-total">--</span><span class="estoque-unidade">t</span></div>
         </div>
 
-        <div class="estoque-linha">
-          <div class="estoque-icone">✅</div>
-          <div class="estoque-texto">
+        <div class="estoque-regua estoque-anim"></div>
+
+        <div class="estoque-grid">
+          <div class="estoque-col estoque-anim">
             <div class="estoque-label">Total Livre</div>
-            <div class="estoque-valor" id="val-livre">--</div>
+            <div class="estoque-valor"><span id="val-livre">--</span><span class="estoque-unidade">t</span></div>
           </div>
-        </div>
-
-        <div class="estoque-linha">
-          <div class="estoque-icone">🔍</div>
-          <div class="estoque-texto">
+          <div class="estoque-col estoque-anim">
             <div class="estoque-label">Qualidade</div>
-            <div class="estoque-valor" id="val-qualidade">--</div>
+            <div class="estoque-valor"><span id="val-qualidade">--</span><span class="estoque-unidade">t</span></div>
           </div>
-        </div>
-
-        <div class="estoque-linha">
-          <div class="estoque-icone">⚠️</div>
-          <div class="estoque-texto">
+          <div class="estoque-col estoque-anim">
             <div class="estoque-label">Bloqueado</div>
-            <div class="estoque-valor" id="val-bloqueado">--</div>
+            <div class="estoque-valor"><span id="val-bloqueado">--</span><span class="estoque-unidade">t</span></div>
           </div>
         </div>
 
@@ -454,6 +486,14 @@
       document.getElementById("minutos").innerText = formatar(minutos);
       document.getElementById("segundos").innerText = formatar(segundos);
     }, 1000);
+
+    // === 1.1 DATA DE HOJE (atualiza sozinha na virada do dia) ===
+    function atualizarDataHoje() {
+      const hoje = new Date();
+      document.getElementById("data-hoje").innerText = hoje.toLocaleDateString('pt-BR');
+    }
+    atualizarDataHoje();
+    setInterval(atualizarDataHoje, 60000);
 
     // === 2. A BUSCA DOS DADOS DE ESTOQUE ===
     function carregarIndicadoresEstoque() {
