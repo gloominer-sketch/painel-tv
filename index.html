@@ -412,7 +412,7 @@
     }
 
     // ===== META DO MES (usada quando a planilha nao trouxer o valor) =====
-    const META_PADRAO = 5000000;
+    const META_MES = 5000000;   // <<< meta fixa: mude aqui se precisar
 
     // ===== 3. FATURAMENTO =====
     function carregarFaturamento() {
@@ -449,8 +449,8 @@
               hoje.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' });
           }
 
-          const metaFinal = meta > 0 ? meta : META_PADRAO;
-          const pct   = metaFinal > 0 ? (geral / metaFinal * 100) : 0;
+          const metaFinal = META_MES;
+          const pct   = geral / metaFinal * 100;
           const falta = metaFinal - geral;
 
           document.getElementById('fat-meta').innerText = dinheiro(metaFinal);
