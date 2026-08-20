@@ -59,15 +59,15 @@
     width: 18vw;
     z-index: 100;
     /* fica acima da marca d'água (z-index: 0) */
-    animation: animarLogo 20s cubic-bezier(0.77, 0, 0.17, 1) infinite;
+    animation: animarLogo 40s cubic-bezier(0.77, 0, 0.17, 1) infinite;
     will-change: transform;
   }
 
   @keyframes animarLogo {
-    0%, 15% {
+    0%, 7.5% {
       transform: translate(41vw, 40vh) scale(2.5);
     }
-    22%, 93% {
+    11%, 96.5% {
       transform: translate(78vw, 3vw) scale(1);
     }
     100% {
@@ -84,13 +84,37 @@
     align-items: center;
     justify-content: center;
     z-index: 10;
-    animation: fadeConteudo 20s cubic-bezier(0.77, 0, 0.17, 1) infinite;
+    animation: fadeCena1 40s cubic-bezier(0.77, 0, 0.17, 1) infinite;
   }
 
-  @keyframes fadeConteudo {
-    0%, 15% { opacity: 0; transform: translateY(3vw); pointer-events: none; }
-    22%, 93% { opacity: 1; transform: translateY(0); pointer-events: auto; }
-    100% { opacity: 0; transform: translateY(-3vw); pointer-events: none; }
+  @keyframes fadeCena1 {
+    0%, 7.5% { opacity: 0; transform: translateY(3vw); pointer-events: none; }
+    11%, 48% { opacity: 1; transform: translateY(0); pointer-events: auto; }
+    53%, 100% { opacity: 0; transform: translateY(-3vw); pointer-events: none; }
+  }
+
+  /* ===================== CENA 2: ESTOQUE (Fade IN/OUT) ===================== */
+  .cena-estoque {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    animation: fadeCena2 40s cubic-bezier(0.77, 0, 0.17, 1) infinite;
+  }
+
+  @keyframes fadeCena2 {
+    0%, 53% { opacity: 0; transform: translateY(3vw); pointer-events: none; }
+    57%, 93% { opacity: 1; transform: translateY(0); pointer-events: auto; }
+    96.5%, 100% { opacity: 0; transform: translateY(-3vw); pointer-events: none; }
+  }
+
+  @keyframes fadeRodape {
+    0%, 7.5% { opacity: 0; }
+    11%, 93% { opacity: 1; }
+    96.5%, 100% { opacity: 0; }
   }
 
   /* ===================== TOPO ESQUERDO ===================== */
@@ -194,73 +218,65 @@
     opacity: 0.8;
   }
 
-  /* ===================== KPI CARDS DE ESTOQUE ===================== */
-  .kpi-painel {
-    display: flex;
-    gap: 2vw;
-    margin-top: 1vw;
-    width: 85vw;
-    justify-content: center;
-    z-index: 20;
-  }
-
-  .kpi-card {
-    display: flex;
-    align-items: center;
-    background: var(--branco);
-    padding: 1.5vw 2vw;
-    border-radius: 1vw;
-    border: 1px solid rgba(32, 42, 68, 0.08);
-    box-shadow: 0 10px 30px rgba(32, 42, 68, 0.05);
-    flex: 1;
-    gap: 1.5vw;
-  }
-
-  .kpi-card.destaque {
-    background: var(--valgroup-azul);
-    color: var(--branco);
-  }
-
-  .kpi-icone {
-    font-size: 2.5vw;
-    background: var(--fundo-cinza);
-    padding: 1vw;
-    border-radius: 0.8vw;
-  }
-
-  .kpi-card.destaque .kpi-icone { background: rgba(255,255,255,0.1); }
-  .kpi-icone.verde { background: rgba(26, 121, 54, 0.1); }
-  .kpi-icone.azul { background: rgba(32, 42, 68, 0.1); }
-  .kpi-icone.alerta { background: rgba(220, 53, 69, 0.1); }
-
-  .kpi-info {
+  /* ===================== LISTA DE ESTOQUE (SOMENTE TEXTO + ICONE) ===================== */
+  .estoque-lista {
     display: flex;
     flex-direction: column;
+    align-items: flex-start;
+    gap: 1.4vw;
+    z-index: 20;
+    margin-top: 2vw;
   }
 
-  .kpi-titulo {
-    font-size: 1vw;
+  .estoque-linha {
+    display: flex;
+    align-items: center;
+    gap: 1.6vw;
+    animation-duration: 40s;
+    animation-timing-function: cubic-bezier(0.77, 0, 0.17, 1);
+    animation-iteration-count: infinite;
+  }
+
+  .estoque-icone { font-size: 3.4vw; line-height: 1; flex-shrink: 0; }
+
+  .estoque-texto { display: flex; flex-direction: column; }
+
+  .estoque-label {
+    color: var(--valgroup-azul);
+    font-size: 1.4vw;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--texto-suave);
+    letter-spacing: 0.25em;
+    opacity: 0.55;
+    line-height: 1;
+    margin-bottom: 0.5vw;
   }
 
-  .kpi-card.destaque .kpi-titulo { color: rgba(255,255,255,0.8); }
-
-  .kpi-valor {
-    font-size: 2.5vw;
-    font-weight: 900;
+  .estoque-valor {
     color: var(--valgroup-azul);
-    line-height: 1.2;
+    font-size: 5.5vw;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
   }
 
-  .kpi-card.destaque .kpi-valor { color: var(--branco); }
+  .estoque-lista .estoque-linha:nth-child(1) { animation-name: nascerLinha1; }
+  .estoque-lista .estoque-linha:nth-child(2) { animation-name: nascerLinha2; }
+  .estoque-lista .estoque-linha:nth-child(3) { animation-name: nascerLinha3; }
+  .estoque-lista .estoque-linha:nth-child(4) { animation-name: nascerLinha4; }
+
+  @keyframes nascerLinha1 { 0%, 57% { opacity: 0; transform: translateY(1.5vw); } 61%, 100% { opacity: 1; transform: translateY(0); } }
+  @keyframes nascerLinha2 { 0%, 59% { opacity: 0; transform: translateY(1.5vw); } 63%, 100% { opacity: 1; transform: translateY(0); } }
+  @keyframes nascerLinha3 { 0%, 61% { opacity: 0; transform: translateY(1.5vw); } 65%, 100% { opacity: 1; transform: translateY(0); } }
+  @keyframes nascerLinha4 { 0%, 63% { opacity: 0; transform: translateY(1.5vw); } 67%, 100% { opacity: 1; transform: translateY(0); } }
 
   /* ===================== RODAPÉ ===================== */
   .rodape { 
     position: absolute; 
     left: 0; right: 0; bottom: 0; 
+    animation: fadeRodape 40s cubic-bezier(0.77, 0, 0.17, 1) infinite;
     display: flex; align-items: center; justify-content: space-between; 
     padding: 1.5vw 4vw;
     background: var(--branco);
@@ -353,57 +369,62 @@
         </div>
       </div>
 
-      <!-- PAINEL DE INDICADORES DE ESTOQUE -->
-      <div class="kpi-painel">
-        
-        <!-- Card 1: Total -->
-        <div class="kpi-card destaque">
-          <div class="kpi-icone">📦</div>
-          <div class="kpi-info">
-            <div class="kpi-titulo">Total Estoque</div>
-            <div class="kpi-valor" id="val-total">--</div>
-          </div>
-        </div>
-
-        <!-- Card 2: Livre -->
-        <div class="kpi-card">
-          <div class="kpi-icone verde">✅</div>
-          <div class="kpi-info">
-            <div class="kpi-titulo">Livre</div>
-            <div class="kpi-valor" id="val-livre">--</div>
-          </div>
-        </div>
-
-        <!-- Card 3: Qualidade -->
-        <div class="kpi-card">
-          <div class="kpi-icone azul">🔍</div>
-          <div class="kpi-info">
-            <div class="kpi-titulo">Qualidade</div>
-            <div class="kpi-valor" id="val-qualidade">--</div>
-          </div>
-        </div>
-
-        <!-- Card 4: Bloqueado -->
-        <div class="kpi-card">
-          <div class="kpi-icone alerta">⚠️</div>
-          <div class="kpi-info">
-            <div class="kpi-titulo">Bloqueado</div>
-            <div class="kpi-valor" id="val-bloqueado">--</div>
-          </div>
-        </div>
-
-      </div>
-
-      <!-- Rodapé -->
-      <div class="rodape">
-        <div class="programe-se">Mantenha os controles de estoque </div>
-        <div class="live-badge">
-          <div class="live-dot"></div>
-          <div class="live-texto">ON-LINE</div>
-        </div>
-      </div>
-
     </div>
+
+    <!-- ===================== CENA 2: VOLUME DE ESTOQUE ===================== -->
+    <div class="cena-estoque">
+
+      <div class="topo">
+        <div class="eyebrow">Volume Total de Estoque Hoje</div>
+        <div class="titulo-principal">Logística SP10</div>
+      </div>
+
+      <div class="estoque-lista">
+
+        <div class="estoque-linha">
+          <div class="estoque-icone">📦</div>
+          <div class="estoque-texto">
+            <div class="estoque-label">Total Estoque</div>
+            <div class="estoque-valor" id="val-total">--</div>
+          </div>
+        </div>
+
+        <div class="estoque-linha">
+          <div class="estoque-icone">✅</div>
+          <div class="estoque-texto">
+            <div class="estoque-label">Total Livre</div>
+            <div class="estoque-valor" id="val-livre">--</div>
+          </div>
+        </div>
+
+        <div class="estoque-linha">
+          <div class="estoque-icone">🔍</div>
+          <div class="estoque-texto">
+            <div class="estoque-label">Qualidade</div>
+            <div class="estoque-valor" id="val-qualidade">--</div>
+          </div>
+        </div>
+
+        <div class="estoque-linha">
+          <div class="estoque-icone">⚠️</div>
+          <div class="estoque-texto">
+            <div class="estoque-label">Bloqueado</div>
+            <div class="estoque-valor" id="val-bloqueado">--</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Rodapé (visível nas duas cenas) -->
+    <div class="rodape">
+      <div class="programe-se">Mantenha os controles de estoque </div>
+      <div class="live-badge">
+        <div class="live-dot"></div>
+        <div class="live-texto">ON-LINE</div>
+      </div>
+    </div>
+
   </div>
 
   <!-- Script do Contador -->
