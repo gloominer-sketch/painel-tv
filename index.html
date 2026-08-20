@@ -385,7 +385,21 @@
     setInterval(atualizarDataHoje, 60000);
 
     // ===== HELPERS =====
-    const num = (v) => Number(String(v == null ? 0 : v).toString().replace(/[^0-9,.-]/g, '').replace(/\.(?=\d{3}\b)/g, '').replace(',', '.')) || 0;
+    const num = (v) => {
+      if (typeof v === 'number') return Number.isFinite(v) ? v : 0;
+
+      const texto = String(v == null ? 0 : v).trim().toLowerCase();
+      const unidade = texto.match(/(bilhoes?|bilhões?|bi|b|milhoes?|milhões?|mi|m)\b/);
+      let valor = texto
+        .replace(/bilhoes?|bilhões?|bi|milhoes?|milhões?|[bm]i?\b/g, '')
+        .replace(/[^0-9,.-]/g, '')
+        .replace(/\.(?=\d{3}\b)/g, '')
+        .replace(',', '.');
+
+      const numero = Number(valor) || 0;
+      if (!unidade) return numero;
+      return numero * (/^(b|bi|bilhao|bilhões?|bilhoes?)/.test(unidade[1]) ? 1000000000 : 1000000);
+    };
     const milhar = (v) => num(v).toLocaleString('pt-BR');
     const dinheiro = (v) => num(v).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     const pega = (obj, chaves) => {
@@ -422,7 +436,7 @@
           const f = Array.isArray(dados) ? dados[0] : dados;
           const geral = num(pega(f, ['faturamento geral', 'faturamento do mes', 'faturamento mes']));
           const dia   = num(pega(f, ['faturamento do dia', 'faturamento dia']));
-          const meta  = num(pega(f, ['meta']));
+          const meta  = num(pega(f, ['meta geral', 'meta mensal', 'meta']));
           const mes   = pega(f, ['mes']);
 
           document.getElementById('fat-geral').innerText = dinheiro(geral);
@@ -449,8 +463,9 @@
               hoje.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' });
           }
 
-          const metaFinal = META_MES;
-          const pct   = geral / metaFinal * 100;
+          // Usa a meta geral da planilha; a constante fica apenas como fallback.
+          const metaFinal = meta || META_MES;
+          const pct   = metaFinal > 0 ? geral / metaFinal * 100 : 0;
           const falta = metaFinal - geral;
 
           document.getElementById('fat-meta').innerText = dinheiro(metaFinal);
