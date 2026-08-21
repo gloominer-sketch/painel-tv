@@ -378,20 +378,23 @@
 
     // ===== HELPERS =====
     const num = (v) => {
-      if (typeof v === 'number') return Number.isFinite(v) ? v : 0;
+  if (typeof v === 'number') return Number.isFinite(v) ? v : 0;
+  
+  // NOVA LINHA: Se já for um número válido no formato americano/JSON, converte direto
+  if (!isNaN(v) && !String(v).includes(',')) return Number(v); 
 
-      const texto = String(v == null ? 0 : v).trim().toLowerCase();
-      const unidade = texto.match(/(bilhoes?|bilhões?|bi|b|milhoes?|milhões?|mi|m)\b/);
-      let valor = texto
-        .replace(/bilhoes?|bilhões?|bi|milhoes?|milhões?|[bm]i?\b/g, '')
-        .replace(/[^0-9,.-]/g, '')
-        .replace(/\.(?=\d{3}\b)/g, '')
-        .replace(',', '.');
+  const texto = String(v == null ? 0 : v).trim().toLowerCase();
+  const unidade = texto.match(/(bilhoes?|bilhões?|bi|b|milhoes?|milhões?|mi|m)\b/);
+  let valor = texto
+    .replace(/bilhoes?|bilhões?|bi|milhoes?|milhões?|[bm]i?\b/g, '')
+    .replace(/[^0-9,.-]/g, '')
+    .replace(/\.(?=\d{3}\b)/g, '')
+    .replace(',', '.');
 
-      const numero = Number(valor) || 0;
-      if (!unidade) return numero;
-      return numero * (/^(b|bi|bilhao|bilhões?|bilhoes?)/.test(unidade[1]) ? 1000000000 : 1000000);
-    };
+  const numero = Number(valor) || 0;
+  if (!unidade) return numero;
+  return numero * (/^(b|bi|bilhao|bilhões?|bilhoes?)/.test(unidade[1]) ? 1000000000 : 1000000);
+};
     const milhar = (v) => num(v).toLocaleString('pt-BR');
     const dinheiro = (v) => num(v).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     const dinheiroCompacto = (v) => {
@@ -454,8 +457,8 @@
           const pct = metaFinal > 0 ? (geral / metaFinal) * 100 : 0;
           const diferenca = metaFinal - geral;
 
-          document.getElementById('fat-meta').innerText = dinheiroCompacto(metaFinal);
-          document.getElementById('meta-topo-valor').innerText = '' + dinheiroCompacto(metaFinal);
+          document.getElementById('fat-meta').innerText = dinheiro(metaFinal);
+          document.getElementById('meta-topo-valor').innerText = dinheiro(metaFinal);
           document.getElementById('fat-pct').innerText = pct.toLocaleString('pt-BR', { maximumFractionDigits: 1 });
           document.getElementById('fat-falta').innerText = dinheiro(diferenca);
         })
